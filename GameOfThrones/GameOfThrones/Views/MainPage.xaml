@@ -1,0 +1,58 @@
+﻿<Page
+    x:Class="GameOfThrones.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GameOfThrones"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:controls="using:Template10.Controls"
+    xmlns:vm="using:GameOfThrones.ViewModels"
+    xmlns:models="using:GameOfThrones.Models"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <NavigationView
+            AllowDrop="False"
+            x:Name="NavigationView"
+            PaneDisplayMode="Top"
+            IsSettingsVisible="False" 
+            Loaded="NavView_Loaded"
+            ItemInvoked="NavView_ItemInvoked"
+            Background="Black"
+            Foreground="White"
+        >
+            <NavigationView.MenuItems>
+                <NavigationViewItem Icon="Library"
+                                    Content="Books" x:Name="BooksContent"
+                                    ToolTipService.ToolTip="Song Of Ice And Fire Collection"
+                                    Tag="AllBookView"/>
+                <NavigationViewItem Icon="People"
+                                    Content="Characters" x:Name="CharactersContent"
+                                    ToolTipService.ToolTip="Characters playing a role in the book series"
+                                    Tag="AllCharacterView"/>
+                <NavigationViewItem Icon="Home"
+                                    Content="Houses" x:Name="HousesContent"
+                                    ToolTipService.ToolTip="The characters homes"
+                                    Tag="AllHouseView"/>
+            </NavigationView.MenuItems>
+
+            <NavigationView.AutoSuggestBox>
+                <AutoSuggestBox QueryIcon="Find" AutomationProperties.Name="Search" Margin="-100,0,0,0" />
+            </NavigationView.AutoSuggestBox>
+
+            <ScrollViewer>
+                <Frame x:Name="ContentFrame" IsTabStop="True" NavigationFailed="{x:Bind ViewModel.NavigationFailed}"
+                 />
+            </ScrollViewer>
+
+
+
+        </NavigationView>
+    </Grid>
+    
+    <Page.DataContext>
+        <vm:MainPageViewModel x:Name="ViewModel"/>
+    </Page.DataContext>
+
+</Page>
