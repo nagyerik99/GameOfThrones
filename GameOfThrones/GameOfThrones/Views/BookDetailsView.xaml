@@ -6,9 +6,44 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    xmlns:m ="using:GameOfThrones.Models"
+    xmlns:vm ="using:GameOfThrones.ViewModels"
+    Background="#261E1D"
+    Foreground="#BEB8AF"
+    >
 
-    <Grid>
+    <Page.DataContext>
+        <vm:BookDetailsViewModel x:Name="ViewModel"/>
+    </Page.DataContext>
 
-    </Grid>
+    <Frame x:Name="BookDetailsFrame">
+        <StackPanel Orientation="Vertical"  Margin="20 10">
+            <RelativePanel>
+                <Image Margin="100 20" Grid.Column="0" x:Name="BookCover" Width="200" Height="Auto"  Source="{x:Bind ViewModel.SelectedBook.Path, Mode=OneWay}"/>
+                <TextBlock Margin="330 10 0 0" Grid.Column="1" x:Name="Title" RelativePanel.AlignTopWith="BookCover" Text="{x:Bind ViewModel.SelectedBook.Name, Mode=OneWay}"/>
+                <TextBlock Margin="330 5 0 0" Grid.Column="1" x:Name="Authors" RelativePanel.Below="Title" Text="{x:Bind ViewModel.SelectedBook.Authors, Mode=OneWay}"/>
+                    <TextBlock Margin="330 5 0 0" Grid.Column="1" x:Name="Released" RelativePanel.Below="Authors" Text="{x:Bind ViewModel.SelectedBook.Released, Mode=OneWay}"/>
+                    <RelativePanel/>
+                    <!--Todo tobbit elkesziteni-->
+                    <!--<TextBlock RelativePanel.AlignTopWith="BookCover"/>-->
+            </RelativePanel>
+            <Button x:Name="CharactersButton" Click="{x:Bind ViewModel.ModifyCharacterListView}" Content="Characters" Foreground="#BEB8AF" Background=" #423730" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"/>
+            <ListView x:Name="CharactersListView" ItemsSource="{x:Bind ViewModel.SelectedBook.Characters, Mode=OneWay}" Visibility="{x:Bind ViewModel.CharactersVisibility, Mode=OneWay}">
+                <ListView.ItemTemplate>
+                        <DataTemplate x:Name="CharacterViewTemplate" x:DataType="m:Character">
+                        <TextBlock Text="{x:Bind Name}"/>
+                    </DataTemplate>
+                    </ListView.ItemTemplate>
+            </ListView>
+            <Button x:Name="POVCharactersButton" Click="{x:Bind ViewModel.ModifyPOVCharacterListView}" Content="POVCharacters" Foreground="#BEB8AF" Background=" #423730" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"/>
+            <ListView x:Name="POVCharactersListView" ItemsSource="{x:Bind ViewModel.SelectedBook.POVCharacters,Mode=OneWay}" Visibility="{x:Bind ViewModel.POVCharactersVisibility, Mode=OneWay}">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:Name="POVCharacterViewTemplate" x:DataType="m:Character">
+                        <TextBlock Text="{x:Bind Name}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <GridView Height="100"/>
+        </StackPanel>
+    </Frame>
 </Page>

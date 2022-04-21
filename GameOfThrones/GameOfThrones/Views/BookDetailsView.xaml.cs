@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameOfThrones.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,12 @@ namespace GameOfThrones.Views
         public BookDetailsView()
         {
             this.InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            ViewModel.Navigated(e.Parameter);
+            base.OnNavigatedTo(e);
         }
     }
 }

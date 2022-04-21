@@ -2,37 +2,81 @@
 using GameOfThrones.Models.DTO;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace GameOfThrones.Services
 {
     public static class DataMappingService
     {
 
-        public static async Task<List<Book>> MappBookReview(List<BookDTO> bookDTOs)
+        private static string ImagePathBase = "ms-appx:///Assets/Images/";
+        private static string UnknownCoverImage = ImagePathBase+"unknown_cover.jpg";
+
+        public static async Task<List<Book>> MappBookSeriesReview(List<BookDTO> bookDTOs)
         {
             List<Book> result = new List<Book>();
 
             foreach (var bookDTO in bookDTOs)
             {
-                result.Add(MappReview(bookDTO));
+                result.Add(await MappReview(bookDTO));
             }
 
             return result;
         }
 
-        private static Book MappReview(BookDTO bookDTO)
+        public static async Task<Book> MappReview(BookDTO bookDTO)
         {
             return new Book
             {
-                ID = bookDTO.ID,
+                ID = bookDTO.Url,
                 Name = bookDTO.Name,
                 Authors = bookDTO.Authors,
                 Publisher = bookDTO.Publisher,
-                Released = bookDTO.Released
+                Released = bookDTO.Released,
+                Path = await GetImagePath(bookDTO.Name)
             };
+        }
+
+        public static List<Character> MappCharactersReview(List<CharacterDTO> characterDTOs)
+        {
+            List<Character> characters = new List<Character>();
+
+            foreach (var characterDTO in characterDTOs)
+            {
+                characters.Add(MappCharacterReview(characterDTO));
+            }
+
+            return characters.OrderBy(x=>x.Name).ToList();
+        }
+
+        public static Character MappCharacterReview(CharacterDTO characterDTO)
+        {
+            return new Character
+            {
+                ID = characterDTO.Url,
+                Name = characterDTO.Name,
+                Aliases = characterDTO.Aliases,
+            };
+        }
+
+        private static async Task<string> GetImagePath(string name)
+        {
+            string LoweredName = name.ToLower();
+            string pathName = LoweredName.Replace(" ", "_")+".jpg";
+            string fullPath = ImagePathBase + pathName;
+            try
+            {
+                await StorageFile.GetFileFromApplicationUriAsync(new Uri(fullPath));
+                return fullPath;
+            }catch(Exception)
+            {
+                return UnknownCoverImage;
+            }
+            
         }
 
         //public static List<Book> MappBookSeries(List<BookDTO> bookDTOs)

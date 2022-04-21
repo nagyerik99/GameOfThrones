@@ -17,6 +17,8 @@
             x:Name="NavigationView"
             PaneDisplayMode="Top"
             IsSettingsVisible="False" 
+            IsBackEnabled="{x:Bind ContentFrame.CanGoBack, Mode=OneWay}"
+            BackRequested="NavigationView_BackRequested"
             Loaded="NavView_Loaded"
             ItemInvoked="NavView_ItemInvoked"
             Background="Black"

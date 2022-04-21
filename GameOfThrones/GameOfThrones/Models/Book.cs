@@ -10,6 +10,7 @@ namespace GameOfThrones.Models
     public class Book
     {
         public string ID { get; set; }
+        public string Path { get; set; }
         public string Name { get; set; }
         public string ISBN { get; set; }
         public List<string> Authors { get; set; }

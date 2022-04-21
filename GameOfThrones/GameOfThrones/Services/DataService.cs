@@ -25,24 +25,47 @@ namespace GameOfThrones.Services
             }
         }
 
-
-
-        //public async static List<Character> GetCharacters()
-        //{
-
-        //}
-
-        //public async static Character GetCharacterByID(string ID)
-        //{
-
-        //}
-
         public async static Task<List<Book>> GetBookSeries()
         {
             var bookDTOs = await GetAsync<List<BookDTO>>(new Uri(serverUrl, "books"));
 
-            var result = await DataMappingService.MappBookReview(bookDTOs);
+            var result = await DataMappingService.MappBookSeriesReview(bookDTOs);
             return result;
+        }
+
+
+
+        public async static Task<Book> GetBookDetails(string ID)
+        {
+            var bookDTO = await GetAsync<BookDTO>(new Uri(ID));
+            var bookBase = await DataMappingService.MappReview(bookDTO);
+            List<CharacterDTO> characterDTOs = new List<CharacterDTO>(bookDTO.Characters.Count);
+
+
+            ParallelOptions parallelOptions = new ParallelOptions();
+            parallelOptions.MaxDegreeOfParallelism = 3;
+            Parallel.ForEach(bookDTO.Characters, parallelOptions, async (character) => {
+                characterDTOs.Add(await GetCharacterDTOByID(character));
+            });
+            var characters = DataMappingService.MappCharactersReview(characterDTOs);
+            bookBase.Characters = characters;
+
+            characterDTOs.Clear();
+            Parallel.ForEach(bookDTO.POVCharacters, parallelOptions, async (character) => {
+                characterDTOs.Add(await GetCharacterDTOByID(character));
+            });
+
+            var povCharacters = DataMappingService.MappCharactersReview(characterDTOs);
+            bookBase.POVCharacters = povCharacters;
+
+
+            return bookBase;
+        }
+
+        private async static Task<CharacterDTO> GetCharacterDTOByID(string ID)
+        {
+            var characterDTO = await GetAsync<CharacterDTO>(new Uri(ID));
+            return characterDTO;
         }
 
         //public async static Character GetHouses()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameOfThrones.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,6 +31,18 @@ namespace GameOfThrones.Views
         private async void AllBookPage_Loaded(object sender, RoutedEventArgs args)
         {
             await ViewModel.LoadBookSeries();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            ViewModel.Navigated(e.Parameter);
+            base.OnNavigatedTo(e);
+        }
+
+        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            ViewModel.NavigateToDetails(e.ClickedItem);
+            //TODO navigation megcsinalasa a kovetkezo oldalra
         }
     }
 }

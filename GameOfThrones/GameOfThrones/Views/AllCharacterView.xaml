@@ -6,9 +6,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="#002C3A"
+    >
 
-    <Grid>
-        <Frame Background="Blue"></Frame>
-    </Grid>
+      <Frame x:Name="AllCharacterFrame">
+        <StackPanel>
+            <ListView>
+                
+            </ListView>
+            <Button Foreground="#002C3A" x:Name="LoadMoreButton" Content="Load More" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="#3088AE"/>
+        </StackPanel>
+    </Frame>
 </Page>

@@ -20,29 +20,26 @@ namespace GameOfThrones.ViewModels
                 ("AllHouseView", typeof(AllHousesView)),
             };
 
-            public MainPageViewModel():base()
-            {
-                
-            }
+            public MainPageViewModel() { }
 
-        public void ViewLoaded(NavigationView view, Frame contentFrame)
+        public void ViewLoaded(int index)
             {
-                view.SelectedItem = view.MenuItems[0];
-                NavigateView("AllBookView", contentFrame);
+                NavigateView(_pages[index].Tag);
             }
 
 
-            public void NavigateView(string navItemTag, Frame contentFrame)
+            public void NavigateView(string navItemTag)
             {
             Type _page = null;
             var item = _pages.FirstOrDefault(p => p.Tag.Equals(navItemTag));
             _page = item.Page;
 
-            var preNavPageType = contentFrame.CurrentSourcePageType;
+            var preNavPageType = navigationService.prevPageType;
 
             if (!(_page is null) && !Type.Equals(preNavPageType, _page))
             {
-               contentFrame.Navigate(_page, null, new Windows.UI.Xaml.Media.Animation.EntranceNavigationTransitionInfo());
+                navigationService.NavigateTo(_page,new object[] { navigationService});
+               //contentFrame.Navigate(_page, null, new Windows.UI.Xaml.Media.Animation.EntranceNavigationTransitionInfo());
             }
         }
 

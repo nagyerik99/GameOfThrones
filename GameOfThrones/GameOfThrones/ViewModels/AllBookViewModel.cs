@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using GameOfThrones.Services;
 using Template10.Mvvm;
+using Windows.UI.Xaml.Controls;
+using GameOfThrones.Views;
 
 namespace GameOfThrones.ViewModels
 {
@@ -34,8 +36,6 @@ namespace GameOfThrones.ViewModels
 
         public async Task LoadBookSeries()
         {
-            //if (BookSeries.Count == 0)
-            // {
             try
             {
                 var result = await DataService.GetBookSeries();
@@ -46,7 +46,15 @@ namespace GameOfThrones.ViewModels
             {
                 throw new Exception("Problems getting data from API Message: " + e.Message);
             }
-            //}
+        }
+
+        public void NavigateToDetails(object item)
+        {
+            var book = item as Book;
+            if (book == null)
+                throw new Exception("Error At Navigation Handling");
+            object[] parameters = new object[] { navigationService, book.ID };
+            navigationService.NavigateTo(typeof(BookDetailsView),parameters);
         }
 
     }

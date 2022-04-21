@@ -13,7 +13,11 @@
     >
     
     <Frame x:Name="AllBookFrame">
-        <ListView ItemsSource="{x:Bind ViewModel.BookSeries, Mode=OneWay}" VerticalAlignment="Center">
+        <ListView
+            ItemsSource="{x:Bind ViewModel.BookSeries, Mode=OneWay}"
+            IsItemClickEnabled="True"
+            ItemClick="ListView_ItemClick">
+            
         <ListView.ItemTemplate>
             <DataTemplate x:Name="BookViewTemplate" x:DataType="m:Book">
                 <Grid>
@@ -23,8 +27,8 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Grid.Column="0"
-                           Source="ms-appx:///Assets/song_of_ice_and_fire.png"
-                           Width="Auto" Height="50"
+                           Source="{x:Bind Path}"
+                           Width="Auto" Height="100"
                            Margin="10"
                            />
 

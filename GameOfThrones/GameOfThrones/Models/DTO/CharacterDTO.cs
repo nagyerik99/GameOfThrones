@@ -8,7 +8,7 @@ namespace GameOfThrones.Models.DTO
 {
     public class CharacterDTO
     {
-        public string ID { get; private set; }
+        public string Url { get; set; }
         public string Name { get; set; }
         public string Gender { get; set; }
         public string Culture { get; set; }
@@ -20,7 +20,9 @@ namespace GameOfThrones.Models.DTO
         public string Mother { get; set; }
         public string Spouse { get; set; }
         public List<string> Allegiances { get; set; }
-        public List<Book> Books { get; set; }
-        public List<Book> POVBooks { get; set; }
+        public List<string> Books { get; set; }
+        public List<string> POVBooks { get; set; }
+        //public List<string> TvSeries { get; set; }
+        //public List<string> PlayedBy { get; set; }
     }
 }

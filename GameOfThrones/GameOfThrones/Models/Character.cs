@@ -8,7 +8,7 @@ namespace GameOfThrones.Models
 {
     public class Character
     {
-        public string ID { get; private set; }
+        public string ID { get; set; }
         public string Name { get; set; }
         public string Gender { get; set; }
         public string Culture { get; set; }

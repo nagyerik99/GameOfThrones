@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameOfThrones.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,16 +21,23 @@ namespace GameOfThrones
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class MainPage : Page, IPageNavigation
     {
+        public Type prevPageType 
+        {
+            get { return ContentFrame.CurrentSourcePageType; }
+        }
+
         public MainPage()
         {
             this.InitializeComponent();
+            ViewModel.navigationService = this;
         }
 
         private void NavView_Loaded(object sender, RoutedEventArgs e)
         {
-            ViewModel.ViewLoaded(NavigationView, ContentFrame);
+            NavigationView.SelectedItem = NavigationView.MenuItems[0];
+            ViewModel.ViewLoaded(0);
         }
 
         private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
@@ -37,8 +45,28 @@ namespace GameOfThrones
             if (args.InvokedItemContainer != null)
             {
                 var navItemTag = args.InvokedItemContainer.Tag.ToString();
-                ViewModel.NavigateView(navItemTag, ContentFrame);
+                ViewModel.NavigateView(navItemTag);
             }
+        }
+
+        public bool NavigateTo(Type page, object[] param)
+        {
+            return ContentFrame.Navigate(page, param);
+        }
+
+        public void GoBack()
+        {
+            ContentFrame.GoBack();
+        }
+
+        public bool CanGoBack()
+        {
+            return ContentFrame.CanGoBack;
+        }
+
+        private void NavigationView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+        {
+            ViewModel.GoBack();
         }
     }
 }

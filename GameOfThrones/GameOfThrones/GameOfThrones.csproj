@@ -117,6 +117,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Services\DataMappingService.cs" />
+    <Compile Include="Services\IPageNavigation.cs" />
     <Compile Include="ViewModels\AllBookViewModel.cs" />
     <Compile Include="ViewModels\AllCharacterViewModel.cs" />
     <Compile Include="ViewModels\AllHouseViewModel.cs" />
@@ -167,7 +168,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Book.cs" />
-    <Content Include="Assets\song_of_ice_and_fire.png" />
+    <Content Include="Assets\Images\a_clash_of_kings.jpg" />
+    <Content Include="Assets\Images\a_dance_with_dragons.jpg" />
+    <Content Include="Assets\Images\a_feast_for_crows.jpg" />
+    <Content Include="Assets\Images\a_game_of_thrones.jpg" />
+    <Content Include="Assets\Images\a_knight_of_the_seven_kingdoms.jpg" />
+    <Content Include="Assets\Images\a_storm_of_swords.jpg" />
+    <Content Include="Assets\Images\song_of_ice_and_fire.png" />
+    <Content Include="Assets\Images\the_hedge_knight.jpg" />
+    <Content Include="Assets\Images\the_mystery_knight.jpg" />
+    <Content Include="Assets\Images\the_princess_and_the_queen.jpg" />
+    <Content Include="Assets\Images\the_sworn_sword.jpg" />
+    <Content Include="Assets\Images\the_world_of_ice_and_fire.jpg" />
+    <Content Include="Assets\Images\unknown_cover.jpg" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

@@ -8,7 +8,7 @@ namespace GameOfThrones.Models.DTO
 {
     public class BookDTO
     {
-        public string ID { get; private set; }
+        public string Url { get; set; }
         public string Name { get; set; }
         public string ISBN { get; set; }
         public List<string> Authors { get; set; }
