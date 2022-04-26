@@ -116,8 +116,14 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Models\Resources\DataType.cs" />
+    <Compile Include="Services\BookDetailsPager.cs" />
+    <Compile Include="Services\CharacterDetailsPager.cs" />
     <Compile Include="Services\DataMappingService.cs" />
-    <Compile Include="Services\IPageNavigation.cs" />
+    <Compile Include="Services\ErrorService.cs" />
+    <Compile Include="Services\HouseDetailsPager.cs" />
+    <Compile Include="Services\Interfaces\IPageNavigation.cs" />
+    <Compile Include="Services\Interfaces\IUIService.cs" />
     <Compile Include="ViewModels\AllBookViewModel.cs" />
     <Compile Include="ViewModels\AllCharacterViewModel.cs" />
     <Compile Include="ViewModels\AllHouseViewModel.cs" />
@@ -157,9 +163,6 @@
     <Compile Include="Models\House.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DataService.cs" />
-    <Compile Include="Views\SearchResultView.xaml.cs">
-      <DependentUpon>SearchResultView.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -223,23 +226,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\SearchResultView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.10</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp">
+      <Version>7.1.2</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
+      <Version>7.1.2</Version>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.1</Version>
     </PackageReference>
-    <PackageReference Include="Template10">
-      <Version>1.1.12</Version>
-    </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\Components\" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

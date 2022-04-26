@@ -30,6 +30,7 @@ namespace GameOfThrones
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            RequestedTheme = ApplicationTheme.Dark;
         }
 
         /// <summary>

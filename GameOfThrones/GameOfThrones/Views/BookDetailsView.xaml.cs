@@ -1,4 +1,5 @@
-﻿using GameOfThrones.Services;
+﻿using GameOfThrones.Models;
+using GameOfThrones.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,6 +33,32 @@ namespace GameOfThrones.Views
         {
             ViewModel.Navigated(e.Parameter);
             base.OnNavigatedTo(e);
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            ViewModel.NavigatedFrom();
+            base.OnNavigatedFrom(e);
+        }
+
+        private async void LodeMorePOVCharacterButton_Click(object sender, RoutedEventArgs e)
+        {
+            await ViewModel.LoadPOV();
+        }
+
+        private async void LodeMoreCharacterButton_Click(object sender, RoutedEventArgs e)
+        {
+            await ViewModel.LoadCharacters();
+        }
+
+        private void CharactersListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            ViewModel.NavigateToDetails<CharacterDetailsView>(((Character)(e.ClickedItem)).ID);
+        }
+
+        private void POVCharactersListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            ViewModel.NavigateToDetails<CharacterDetailsView>(((Character)(e.ClickedItem)).ID);
         }
     }
 }

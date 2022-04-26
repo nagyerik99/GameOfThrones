@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GameOfThrones.Models;
+using GameOfThrones.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +27,28 @@ namespace GameOfThrones.Views
         public AllHousesView()
         {
             this.InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            ViewModel.Navigated(e.Parameter);
+            base.OnNavigatedTo(e);
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            ViewModel.NavigatedFrom();
+            base.OnNavigatedFrom(e);
+        }
+
+        private async void LoadMoreButton_Click(object sender, RoutedEventArgs e)
+        {
+            await ViewModel.LoadHouses();
+        }
+
+        private void HousesListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            ViewModel.NavigateToDetails<HouseDetailsView>(((House)e.ClickedItem).ID);
         }
     }
 }

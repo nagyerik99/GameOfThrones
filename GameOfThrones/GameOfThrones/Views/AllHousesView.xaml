@@ -5,10 +5,53 @@
     xmlns:local="using:GameOfThrones.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    xmlns:vm="using:GameOfThrones.ViewModels"
+    xmlns:m="using:GameOfThrones.Models"
+    Background="#261E1D"
+    Foreground="#BEB8AF"
+    x:Name="MainPage"
+    >
+
+    <Page.DataContext>
+        <vm:AllHouseViewModel x:Name="ViewModel"/>
+    </Page.DataContext>
 
     <Grid>
-        <Frame Background="Green"></Frame>
+        <controls:Loading x:Name="LoadingControl" IsLoading="{Binding IsBusy, Mode=OneWay}" Opacity="0.5">
+            <StackPanel Orientation="Horizontal" Padding="12">
+                <Grid Margin="0,0,8,0">
+                    <ProgressRing IsActive="True"/>
+                </Grid>
+                <TextBlock Text="Loading..." VerticalAlignment="Center" />
+            </StackPanel>
+        </controls:Loading>
+
+        <Frame x:Name="AllHouseFrame" Visibility="{x:Bind ViewModel.ViewLoadingVisibility, Mode=OneWay}">
+            <StackPanel>
+                <ListView x:Name="HousesListView" ItemsSource="{x:Bind ViewModel.Houses, Mode=OneWay}"
+                          ItemClick="HousesListView_ItemClick"
+                          IsItemClickEnabled="True">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:Name="HousesViewTemplate" x:DataType="m:House">
+                            <controls:WrapPanel Orientation="Horizontal" Margin="0,5">
+                                <TextBlock Text="{x:Bind Name}" TextWrapping="Wrap"/>
+                                <TextBlock Text="--" Margin="5,0" TextWrapping="Wrap"/>
+                                <TextBlock Text="{x:Bind Words}" FontStyle="Italic" TextWrapping="Wrap"/>
+                            </controls:WrapPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Button Foreground="#BEB8AF" x:Name="LoadMoreButton"
+                    Visibility="{x:Bind ViewModel.LoadMoreVisibility, Mode=OneWay}"
+                    Content="{x:Bind ViewModel.LoadMoreText, Mode=OneWay}" HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    Background="#423730"
+                    Click="LoadMoreButton_Click"
+                    IsEnabled="{x:Bind ViewModel.LoadMoreEnabled, Mode=OneWay}"
+                    />
+            </StackPanel>
+        </Frame>
     </Grid>
 </Page>

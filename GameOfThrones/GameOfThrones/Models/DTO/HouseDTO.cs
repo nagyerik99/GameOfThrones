@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameOfThrones.Models.DTO
 {
@@ -22,8 +19,8 @@ namespace GameOfThrones.Models.DTO
         public string Founder { get; set; }
         public string DiedOut { get; set; }
         public List<string> AncestralWeapons { get; set; }
-        List<string> CadetBranches { get; set; }
-        List<string> SwornMembers { get; set; }
+        public List<string> CadetBranches { get; set; }
+        public List<string> SwornMembers { get; set; }
 
     }
 }

@@ -8,42 +8,131 @@
     mc:Ignorable="d"
     xmlns:m ="using:GameOfThrones.Models"
     xmlns:vm ="using:GameOfThrones.ViewModels"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     Background="#261E1D"
     Foreground="#BEB8AF"
+    FontSize="16"
     >
 
     <Page.DataContext>
         <vm:BookDetailsViewModel x:Name="ViewModel"/>
     </Page.DataContext>
 
-    <Frame x:Name="BookDetailsFrame">
-        <StackPanel Orientation="Vertical"  Margin="20 10">
-            <RelativePanel>
-                <Image Margin="100 20" Grid.Column="0" x:Name="BookCover" Width="200" Height="Auto"  Source="{x:Bind ViewModel.SelectedBook.Path, Mode=OneWay}"/>
-                <TextBlock Margin="330 10 0 0" Grid.Column="1" x:Name="Title" RelativePanel.AlignTopWith="BookCover" Text="{x:Bind ViewModel.SelectedBook.Name, Mode=OneWay}"/>
-                <TextBlock Margin="330 5 0 0" Grid.Column="1" x:Name="Authors" RelativePanel.Below="Title" Text="{x:Bind ViewModel.SelectedBook.Authors, Mode=OneWay}"/>
-                    <TextBlock Margin="330 5 0 0" Grid.Column="1" x:Name="Released" RelativePanel.Below="Authors" Text="{x:Bind ViewModel.SelectedBook.Released, Mode=OneWay}"/>
-                    <RelativePanel/>
-                    <!--Todo tobbit elkesziteni-->
-                    <!--<TextBlock RelativePanel.AlignTopWith="BookCover"/>-->
-            </RelativePanel>
-            <Button x:Name="CharactersButton" Click="{x:Bind ViewModel.ModifyCharacterListView}" Content="Characters" Foreground="#BEB8AF" Background=" #423730" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"/>
-            <ListView x:Name="CharactersListView" ItemsSource="{x:Bind ViewModel.SelectedBook.Characters, Mode=OneWay}" Visibility="{x:Bind ViewModel.CharactersVisibility, Mode=OneWay}">
-                <ListView.ItemTemplate>
+    <Grid>
+        <controls:Loading x:Name="LoadingControl" IsLoading="{Binding IsBusy, Mode=OneWay}" Opacity="0.3">
+            <StackPanel Orientation="Horizontal" Padding="12">
+                <Grid Margin="0,0,8,0">
+                    <ProgressRing IsActive="True"/>
+                </Grid>
+                <TextBlock Text="Loading..." VerticalAlignment="Center" />
+            </StackPanel>
+        </controls:Loading>
+
+        <Frame x:Name="BookDetailsFrame" Visibility="{x:Bind ViewModel.ViewLoadingVisibility, Mode=OneWay}">
+            <StackPanel Orientation="Vertical"  Margin="20">
+                <Grid Margin="50,10,20,10" Padding="5,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="Title" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="10" Text="{x:Bind ViewModel.SelectedBook.Name, Mode=OneWay}" TextWrapping="Wrap" FontSize="24" Margin="0,5"/>
+                    <Image Grid.Column="0" Grid.Row="1" Grid.RowSpan="7" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="BookCover" Stretch="Uniform" Width="200" Height="Auto"  Source="{x:Bind ViewModel.SelectedBook.Path, Mode=OneWay}"/>
+
+                    <TextBlock Text="ISBN:" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,5"/>
+                    <TextBlock  Grid.Column="2" Grid.Row="1" x:Name="ISBN"  Text="{x:Bind ViewModel.SelectedBook.ISBN, Mode=OneWay}" TextWrapping="Wrap" Margin="5,5"/>
+
+                    <TextBlock Text="Authors:" Grid.Column="1" Grid.Row="2" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,5"/>
+                    <TextBlock  Grid.Column="2" Grid.Row="2" x:Name="Authors" Text="{x:Bind ViewModel.SelectedBook.Authors, Mode=OneWay}" TextWrapping="Wrap" Margin="5,5"/>
+
+                    <TextBlock Text="Released:" Grid.Column="1" Grid.Row="3" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,5"/>
+                    <TextBlock  Grid.Column="2" Grid.Row="3" x:Name="Released" Text="{x:Bind ViewModel.SelectedBook.Released, Mode=OneWay}" TextWrapping="Wrap" Margin="5,5"/>
+
+                    <TextBlock Text="Publisher:" Grid.Column="1" Grid.Row="4" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,5"/>
+                    <TextBlock  Grid.Column="2" Grid.Row="4" x:Name="Publisher" Text="{x:Bind ViewModel.SelectedBook.Publisher, Mode=OneWay}" TextWrapping="Wrap" Margin="5,5"/>
+
+                    <TextBlock Text="Country:" Grid.Column="1" Grid.Row="5" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,5"/>
+                    <TextBlock  Grid.Column="2" Grid.Row="5" x:Name="Country" Text="{x:Bind ViewModel.SelectedBook.Country, Mode=OneWay}" TextWrapping="Wrap" Margin="5,5"/>
+
+                    <TextBlock Text="Type:" Grid.Column="1" Grid.Row="6" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,5"/>
+                    <TextBlock  Grid.Column="2" Grid.Row="6" x:Name="MediaType" Text="{x:Bind ViewModel.SelectedBook.MediaType, Mode=OneWay}" TextWrapping="Wrap" Margin="5,5"/>
+
+                    <TextBlock Text="Pages:" Grid.Column="1" Grid.Row="7" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,5"/>
+                    <TextBlock  Grid.Column="2" Grid.Row="7" x:Name="NumOfPages" Text="{x:Bind ViewModel.SelectedBook.NumOfPages, Mode=OneWay}" TextWrapping="Wrap" Margin="5,5"/>
+                </Grid>
+                <Button x:Name="CharactersButton"
+                        Click="{x:Bind ViewModel.ModifyCharacterListView}" Content="Characters"
+                        Foreground="#BEB8AF" Background=" #423730" HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        FontStyle="Oblique"
+                        Margin="0,10"
+                        />
+                <ListView x:Name="CharactersListView"
+                          ItemsSource="{x:Bind ViewModel.Characters, Mode=OneWay}"
+                          Visibility="{x:Bind ViewModel.CharactersVisibility, Mode=OneWay}"
+                          ItemClick="CharactersListView_ItemClick"
+                          IsItemClickEnabled="True">
+                    <ListView.ItemTemplate>
                         <DataTemplate x:Name="CharacterViewTemplate" x:DataType="m:Character">
-                        <TextBlock Text="{x:Bind Name}"/>
-                    </DataTemplate>
+                            <controls:WrapPanel Orientation="Horizontal" Margin="0,5" VerticalAlignment="Center">
+                                <TextBlock Text="{x:Bind Name}" TextWrapping="Wrap"/>
+                                <TextBlock Text="--" Margin="5,0" TextWrapping="Wrap"/>
+                                <TextBlock Text="{x:Bind Aliases}" FontStyle="Italic" TextWrapping="Wrap"/>
+                            </controls:WrapPanel>
+                        </DataTemplate>
                     </ListView.ItemTemplate>
-            </ListView>
-            <Button x:Name="POVCharactersButton" Click="{x:Bind ViewModel.ModifyPOVCharacterListView}" Content="POVCharacters" Foreground="#BEB8AF" Background=" #423730" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"/>
-            <ListView x:Name="POVCharactersListView" ItemsSource="{x:Bind ViewModel.SelectedBook.POVCharacters,Mode=OneWay}" Visibility="{x:Bind ViewModel.POVCharactersVisibility, Mode=OneWay}">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:Name="POVCharacterViewTemplate" x:DataType="m:Character">
-                        <TextBlock Text="{x:Bind Name}"/>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <GridView Height="100"/>
-        </StackPanel>
-    </Frame>
+                </ListView>
+                <Button x:Name="LodeMoreCharacterButton" Click="LodeMoreCharacterButton_Click" Visibility="{x:Bind ViewModel.LoadMoreCharactersVisibility, Mode=OneWay}"
+                        Content="{x:Bind ViewModel.CLoadMoreText, Mode=OneWay}"
+                        IsEnabled="{x:Bind ViewModel.CDataLoaded, Mode=OneWay}"
+                        Foreground="#BEB8AF" Background="#261E1D"
+                        FontStyle="Oblique"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                <Button x:Name="POVCharactersButton"
+                        Click="{x:Bind ViewModel.ModifyPOVCharacterListView}"
+                        Content="POVCharacters"
+                        Foreground="#BEB8AF"
+                        Background=" #423730"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        FontStyle="Oblique"
+                        Margin="0,10"
+                        />
+                <ListView x:Name="POVCharactersListView"
+                          ItemsSource="{x:Bind ViewModel.PovCharacters,Mode=OneWay}"
+                          Visibility="{x:Bind ViewModel.POVCharactersVisibility, Mode=OneWay}"
+                          ItemClick="POVCharactersListView_ItemClick"
+                          IsItemClickEnabled="True"
+                          >
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:Name="POVCharacterViewTemplate" x:DataType="m:Character">
+                            <controls:WrapPanel Orientation="Horizontal" Margin="0,5" VerticalAlignment="Center">
+                                <TextBlock Text="{x:Bind Name}" TextWrapping="Wrap"/>
+                                <TextBlock Text="--" Margin="5,0" TextWrapping="Wrap"/>
+                                <TextBlock Text="{x:Bind Aliases}" FontStyle="Italic" TextWrapping="Wrap"/>
+                            </controls:WrapPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Button x:Name="LodeMorePOVCharacterButton"
+                        Click="LodeMorePOVCharacterButton_Click"
+                        Visibility="{x:Bind ViewModel.LoadMorePOVCharactersVisibility, Mode=OneWay}"
+                        Content="{x:Bind ViewModel.POVLoadMoreText, Mode=OneWay}"
+                        IsEnabled="{x:Bind ViewModel.POVDataLoaded, Mode=OneWay}"
+                        Foreground="#BEB8AF" Background="#261E1D"
+                        FontStyle="Oblique"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+            </StackPanel>
+        </Frame>
+    </Grid>
 </Page>

@@ -6,9 +6,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:controls="using:Template10.Controls"
     xmlns:vm="using:GameOfThrones.ViewModels"
     xmlns:models="using:GameOfThrones.Models"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
@@ -24,6 +24,7 @@
             Background="Black"
             Foreground="White"
         >
+
             <NavigationView.MenuItems>
                 <NavigationViewItem Icon="Library"
                                     Content="Books" x:Name="BooksContent"
@@ -39,17 +40,11 @@
                                     Tag="AllHouseView"/>
             </NavigationView.MenuItems>
 
-            <NavigationView.AutoSuggestBox>
-                <AutoSuggestBox QueryIcon="Find" AutomationProperties.Name="Search" Margin="-100,0,0,0" />
-            </NavigationView.AutoSuggestBox>
-
             <ScrollViewer>
                 <Frame x:Name="ContentFrame" IsTabStop="True" NavigationFailed="{x:Bind ViewModel.NavigationFailed}"
                  />
             </ScrollViewer>
-
-
-
+            
         </NavigationView>
     </Grid>
     

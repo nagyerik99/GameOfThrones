@@ -5,10 +5,160 @@
     xmlns:local="using:GameOfThrones.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:vm="using:GameOfThrones.ViewModels"
+    xmlns:m="using:GameOfThrones.Models"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="#261E1D"
+    Foreground="#BEB8AF"
+    FontSize="16"
+    >
+
+    <Page.DataContext>
+        <vm:HouseDetailsViewModel x:Name="ViewModel"/>
+    </Page.DataContext>
 
     <Grid>
+        <controls:Loading x:Name="LoadingControl" IsLoading="{Binding IsBusy, Mode=OneWay}" Opacity="0.8">
+            <StackPanel Orientation="Horizontal" Padding="12">
+                <Grid Margin="0,0,8,0">
+                    <ProgressRing IsActive="True"/>
+                </Grid>
+                <TextBlock Text="Loading..." VerticalAlignment="Center" />
+            </StackPanel>
+        </controls:Loading>
 
+        <Frame x:Name="HouseDetailsFrame" Visibility="{x:Bind ViewModel.ViewLoadingVisibility, Mode=OneWay}">
+            <StackPanel Orientation="Vertical"  Margin="20">
+                <Grid Margin="0,0,20,10" VerticalAlignment="Center" Padding="5,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedHouse.Name, Mode=OneWay}" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,10" FontSize="24"/>
+
+                    <TextBlock Text="Region:" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Margin="0,10"/>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedHouse.Region, Mode=OneWay}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Margin="0,10" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Words:" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" Margin="0,10"/>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedHouse.Words, Mode=OneWay}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" Margin="0,10" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="CoatOfArms:" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Margin="0,10"/>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedHouse.CoatOfArms, Mode=OneWay}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" Margin="0,10" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Titles:" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" Margin="0,10"/>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedHouse.Titles, Mode=OneWay}" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left" Margin="0,10" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Seats:" Grid.Column="0" Grid.Row="5" HorizontalAlignment="Center"  Margin="0,10"/>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedHouse.Seats, Mode=OneWay}" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left" Margin="0,10" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Founded:" Grid.Column="0" Grid.Row="6" HorizontalAlignment="Center"  Margin="0,10"/>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedHouse.Founded, Mode=OneWay}" Grid.Column="1" Grid.Row="6" HorizontalAlignment="Left" Margin="0,10" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="DiedOut:" Grid.Column="0" Grid.Row="7" HorizontalAlignment="Center"  Margin="0,10"/>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedHouse.DiedOut, Mode=OneWay}" Grid.Column="1" Grid.Row="7" HorizontalAlignment="Left" Margin="0,10" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="AncestrialWeapons:" Grid.Column="0" Grid.Row="8" HorizontalAlignment="Center"  Margin="0,10"/>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedHouse.AncestralWeapons, Mode=OneWay}" Grid.Column="1" Grid.Row="8" HorizontalAlignment="Left" Margin="0,10" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Founder:" Grid.Column="0" Grid.Row="9" HorizontalAlignment="Center" Margin="0,10"/>
+                    <HyperlinkButton x:Name="FounderName" Click="FounderName_Click" Content="{x:Bind ViewModel.SelectedHouse.Founder.Name, Mode=OneWay}" Grid.Column="1" Grid.Row="9" HorizontalAlignment="Left" Margin="0,10"
+                                     FontSize="16"/>
+
+                    <TextBlock Text="CurrentLord:" Grid.Column="0" Grid.Row="10" HorizontalAlignment="Center" Margin="0,10"/>
+                    <HyperlinkButton x:Name="CurrentLordName" Click="CurrentLordName_Click" Content="{x:Bind ViewModel.SelectedHouse.CurrentLord.Name, Mode=OneWay}" Grid.Column="1" Grid.Row="10" HorizontalAlignment="Left" Margin="0,10"
+                                     FontSize="16"/>
+                    
+                    <TextBlock Text="Heir:" Grid.Column="0" Grid.Row="11" HorizontalAlignment="Center" Margin="0,10"/>
+                    <HyperlinkButton x:Name="HeirName" Click="HeirName_Click" Content="{x:Bind ViewModel.SelectedHouse.Heir.Name, Mode=OneWay}" Grid.Column="1" Grid.Row="11" HorizontalAlignment="Left" Margin="0,10"
+                                     FontSize="16"/>
+
+                    <TextBlock Text="OverLord:" Grid.Column="0" Grid.Row="12" HorizontalAlignment="Center" Margin="0,10"/>
+                    <HyperlinkButton x:Name="OverLordName" Click="OverLordName_Click" Content="{x:Bind ViewModel.SelectedHouse.OverLord.Name, Mode=OneWay}" Grid.Column="1" Grid.Row="12" HorizontalAlignment="Left" Margin="0,10"
+                                     FontSize="16"/>
+                </Grid>
+
+                <Button x:Name="CadetListViewButton"
+                        Click="{x:Bind ViewModel.ModifyCadetListView}" Content="Cadet Branches"
+                        Foreground="#BEB8AF" Background="#423730" HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        FontStyle="Oblique"
+                        Margin="0,10"
+                        FontSize="16"
+                        />
+
+                <ListView x:Name="CadetBrancesListView" 
+                          ItemsSource="{x:Bind ViewModel.CadetBranches,Mode=OneWay}"
+                          Visibility="{x:Bind ViewModel.CadetBranchesVisibility, Mode=OneWay}"
+                          IsItemClickEnabled="True"
+                          ItemClick="CadetBrancesListView_ItemClick"
+                          >
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:Name="CadetBranchesListViewTemplate" x:DataType="m:House">
+                            <controls:WrapPanel Orientation="Horizontal" Margin="0,5" VerticalAlignment="Center">
+                                <TextBlock Text="{x:Bind Name}" TextWrapping="Wrap"/>
+                                <TextBlock Text="--" Margin="5,0" TextWrapping="Wrap"/>
+                                <TextBlock Text="{x:Bind Words}" FontStyle="Italic" TextWrapping="Wrap"/>
+                            </controls:WrapPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Button x:Name="LoadMoreCadetBranchesButton" Click="LoadMoreCadetBranchesButton_Click" Visibility="{x:Bind ViewModel.LoadMoreCadetBranchesVisibility, Mode=OneWay}"
+                        Content="{x:Bind ViewModel.CadetBranchesLoadMoreText, Mode=OneWay}"
+                        IsEnabled="{x:Bind ViewModel.CadetDataLoaded, Mode=OneWay}"
+                        Foreground="{x:Bind Foreground}" Background="{x:Bind Background}"
+                        FontStyle="Oblique"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                <Button x:Name="SwornMemberListViewButton"
+                        Click="{x:Bind ViewModel.ModifyMembersListView}"
+                        Content="Sworn Members"
+                        Foreground="#BEB8AF"
+                        Background="#423730"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        FontStyle="Oblique"
+                        Margin="0,10"
+                        FontSize="16"
+                        />
+                <ListView x:Name="MembersListView" ItemsSource="{x:Bind ViewModel.SwornMembers,Mode=OneWay}"
+                          Visibility="{x:Bind ViewModel.SwornMembersVisibility, Mode=OneWay}"
+                          IsItemClickEnabled="True"
+                          ItemClick="MembersListView_ItemClick"
+                          >
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:Name="MembersListViewTemplate" x:DataType="m:Character">
+                            <controls:WrapPanel Orientation="Horizontal" Margin="0,5" VerticalAlignment="Center">
+                                <TextBlock Text="{x:Bind Name}" TextWrapping="Wrap"/>
+                                <TextBlock Text="--" Margin="5,0" TextWrapping="Wrap"/>
+                                <TextBlock Text="{x:Bind Aliases}" FontStyle="Italic" TextWrapping="Wrap"/>
+                            </controls:WrapPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Button x:Name="LoadMoreMembersButton" Click="LoadMoreMembersButton_Click" Visibility="{x:Bind ViewModel.LoadMoreSwornMembersVisibility, Mode=OneWay}"
+                        Content="{x:Bind ViewModel.MembersLoadMoreText, Mode=OneWay}"
+                        IsEnabled="{x:Bind ViewModel.MembersDataLoaded, Mode=OneWay}"
+                        Foreground="{x:Bind Foreground}" Background="{x:Bind Background}"
+                        FontStyle="Oblique"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+
+            </StackPanel>
+        </Frame>
     </Grid>
+    
 </Page>

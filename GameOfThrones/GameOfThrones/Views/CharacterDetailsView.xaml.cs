@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GameOfThrones.Models;
+using GameOfThrones.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +27,48 @@ namespace GameOfThrones.Views
         public CharacterDetailsView()
         {
             this.InitializeComponent();
+        }
+
+        private async void LoadMoreAllegiancesButton_Click(object sender, RoutedEventArgs e)
+        {
+            await ViewModel.LoadAllegiances();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            ViewModel.Navigated(e.Parameter);
+            base.OnNavigatedTo(e);
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            ViewModel.NavigatedFrom();
+            base.OnNavigatedFrom(e);
+        }
+
+        private void AllegiancesListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            ViewModel.NavigateToDetails<HouseDetailsView>(((House)e.ClickedItem).ID);
+        }
+
+        private void BooksListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            ViewModel.NavigateToDetails<BookDetailsView>(((Book)e.ClickedItem).ID);
+        }
+
+        private void SpouseName_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.NavigateToDetails<CharacterDetailsView>(ViewModel.SelectedCharacter.Spouse.ID);
+        }
+
+        private void MotherName_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.NavigateToDetails<CharacterDetailsView>(ViewModel.SelectedCharacter.Mother.ID);
+        }
+
+        private void FatherName_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.NavigateToDetails<CharacterDetailsView>(ViewModel.SelectedCharacter.Father.ID);
         }
     }
 }
