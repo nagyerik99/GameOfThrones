@@ -8,6 +8,10 @@ using Windows.UI.Xaml;
 
 namespace GameOfThrones.ViewModels
 {
+
+    /// <summary>
+    /// Viewmodel for the HouseDetailsView, containg the business logic
+    /// </summary>
     public class HouseDetailsViewModel : ViewModelBase
     {
         private House _selectedHouse;
@@ -16,30 +20,30 @@ namespace GameOfThrones.ViewModels
         private Visibility _cadetBranchesVisibility = Visibility.Visible;
         private Visibility _swornMembersVisibility = Visibility.Visible;
 
-        private bool cadetDataLoaded = false;
-        private bool swornMembersLoaded = false;
+        private bool _cadetDataLoaded = false;
+        private bool _swornMembersLoaded = false;
 
-        private string cadetLoadMoreText = loadMoreText;
-        private string swornMembersLoadMoreText = loadMoreText;
+        private string _cadetLoadMoreText = s_LoadMoreText;
+        private string _swornMembersLoadMoreText = s_LoadMoreText;
 
-        private HouseDetailsPager Pager;
+        private HouseDetailsPager _pager;
 
         public bool CadetDataLoaded
         {
-            get { return cadetDataLoaded; }
+            get { return _cadetDataLoaded; }
             private set
             {
-                cadetDataLoaded = value;
+                _cadetDataLoaded = value;
                 OnPropertyChanged();
             }
         }
 
         public bool MembersDataLoaded
         {
-            get { return swornMembersLoaded; }
+            get { return _swornMembersLoaded; }
             private set
             {
-                swornMembersLoaded = value;
+                _swornMembersLoaded = value;
                 OnPropertyChanged();
             }
         }
@@ -75,13 +79,13 @@ namespace GameOfThrones.ViewModels
         {
             get
             {
-                if (Pager == null || _cadetBranchesVisibility == Visibility.Collapsed)
+                if (_pager == null || _cadetBranchesVisibility == Visibility.Collapsed)
                 {
                     return Visibility.Collapsed;
                 }
                 else
                 {
-                    return Pager.CadetBranchesEmpty;
+                    return _pager.CadetBranchesEmpty;
                 }
 
             }
@@ -91,13 +95,13 @@ namespace GameOfThrones.ViewModels
         {
             get
             {
-                if (Pager == null || _swornMembersVisibility == Visibility.Collapsed)
+                if (_pager == null || _swornMembersVisibility == Visibility.Collapsed)
                 {
                     return Visibility.Collapsed;
                 }
                 else
                 {
-                    return Pager.MembersEmpty;
+                    return _pager.MembersEmpty;
                 }
 
             }
@@ -145,14 +149,14 @@ namespace GameOfThrones.ViewModels
         {
             get
             {
-                return cadetLoadMoreText;
+                return _cadetLoadMoreText;
             }
 
             private set
             {
-                if (cadetLoadMoreText != value)
+                if (_cadetLoadMoreText != value)
                 {
-                    cadetLoadMoreText = value;
+                    _cadetLoadMoreText = value;
                     OnPropertyChanged();
                 }
             }
@@ -162,14 +166,14 @@ namespace GameOfThrones.ViewModels
         {
             get
             {
-                return swornMembersLoadMoreText;
+                return _swornMembersLoadMoreText;
             }
 
             private set
             {
-                if (swornMembersLoadMoreText != value)
+                if (_swornMembersLoadMoreText != value)
                 {
-                    swornMembersLoadMoreText = value;
+                    _swornMembersLoadMoreText = value;
                     OnPropertyChanged();
                 }
             }
@@ -177,11 +181,17 @@ namespace GameOfThrones.ViewModels
 
         public HouseDetailsViewModel()
         {
-            pageSize = 10;
+            PageSize = 10;
             CadetBranches = new ObservableCollection<House>();
             SwornMembers = new ObservableCollection<Character>();
         }
 
+
+        /// <summary>
+        /// Called on navigation. Calls the base function, and starts to load the selectedHouse if capable.
+        /// <para>Throws an error if cant load the data </para>
+        /// </summary>
+        /// <param name="parameters"></param>
         public override async void Navigated(object parameters)
         {
             base.Navigated(parameters);
@@ -196,6 +206,10 @@ namespace GameOfThrones.ViewModels
             }
         }
 
+        /// <summary>
+        /// <para>Sets the view visible and the paging functionality enabled</para>
+        /// <para>Should be called, when the event/long procedure finished</para>
+        /// </summary>
         protected override void Loaded()
         {
             base.Loaded();//Isbusy=false;
@@ -206,13 +220,17 @@ namespace GameOfThrones.ViewModels
             OnPropertyChanged(nameof(LoadMoreSwornMembersVisibility));//set visible if have to 
         }
 
+        /// <summary>
+        /// Loads the next page of members associated with the <see cref="SelectedHouse"/>
+        /// </summary>
+        /// <returns><see cref="Task"/></returns>
         public async Task LoadMoreMembers()
         {
             try
             {
                 MembersDataLoaded = false;
-                MembersLoadMoreText = loadingText;
-                var result = await Pager.GetNextMembers();
+                MembersLoadMoreText = s_LoadingText;
+                var result = await _pager.GetNextMembers();
 
                 foreach (var res in result)
                 {
@@ -230,18 +248,23 @@ namespace GameOfThrones.ViewModels
             finally
             {
                 MembersDataLoaded = true;
-                MembersLoadMoreText = loadMoreText;
+                MembersLoadMoreText = s_LoadMoreText;
                 OnPropertyChanged(nameof(LoadMoreSwornMembersVisibility));
             }
         }
 
+
+        /// <summary>
+        /// Loads the next page of characters, if able to, and loads it to <see cref="CadetBranches"/>
+        /// </summary>
+        /// <returns><see cref="Task"/></returns>
         public async Task LoadMoreCadets()
         {
             CadetDataLoaded = false;
-            CadetBranchesLoadMoreText = loadingText;
+            CadetBranchesLoadMoreText = s_LoadingText;
             try
             {
-                var result = await Pager.GetNextCadets();
+                var result = await _pager.GetNextCadets();
 
                 foreach (var res in result)
                 {
@@ -259,19 +282,28 @@ namespace GameOfThrones.ViewModels
             finally
             {
                 CadetDataLoaded = true;
-                CadetBranchesLoadMoreText = loadMoreText;
+                CadetBranchesLoadMoreText = s_LoadMoreText;
                 OnPropertyChanged(nameof(LoadMoreCadetBranchesVisibility));
 
             }
         }
 
-
+        /// <summary>
+        /// Sets the CadetList visible, or collapsed, depends on the pervious state of the View 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void ModifyCadetListView(object sender, RoutedEventArgs e)
         {
             CadetBranchesVisibility = CadetBranchesVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
             OnPropertyChanged(nameof(LoadMoreCadetBranchesVisibility));
         }
 
+        /// <summary>
+        /// Sets the MembersList visible, org collapsed, depending on the preveious state.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void ModifyMembersListView(object sender, RoutedEventArgs e)
         {
             SwornMembersVisibility = SwornMembersVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
@@ -298,7 +330,7 @@ namespace GameOfThrones.ViewModels
         {
             var result = await DataService.GetHouseDetails(id);
             SelectedHouse = result.Item1;
-            Pager = new HouseDetailsPager(result.Item2, result.Item3, pageSize);
+            _pager = new HouseDetailsPager(result.Item2, result.Item3, PageSize);
             await LoadMoreMembers();
             await LoadMoreCadets();
             Loaded();

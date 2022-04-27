@@ -10,6 +10,10 @@ using static GameOfThrones.Services.ErrorService;
 
 namespace GameOfThrones.ViewModels
 {
+
+    /// <summary>
+    /// Viewmodel for the characterDetailsView, containing the business logic
+    /// </summary>
     public class CharacterDetailsViewModel : ViewModelBase
     {
         private Character _selectedCharacter;
@@ -18,8 +22,8 @@ namespace GameOfThrones.ViewModels
         private Visibility _allegiancesVisibility = Visibility.Collapsed;
         private Visibility _booksVisibility = Visibility.Collapsed;
         private bool _allegiancesDataLoaded = false;
-        private string _allegiancesLoadMoreText = loadMoreText;
-        private CharacterDetailsPager Pager;
+        private string _allegiancesLoadMoreText = s_LoadMoreText;
+        private CharacterDetailsPager _pager;
 
         public bool ADataLoaded
         {
@@ -72,13 +76,13 @@ namespace GameOfThrones.ViewModels
         {
             get
             {
-                if (Pager == null || _allegiancesVisibility == Visibility.Collapsed)
+                if (_pager == null || _allegiancesVisibility == Visibility.Collapsed)
                 {
                     return Visibility.Collapsed;
                 }
                 else
                 {
-                    return Pager.HousePageEmpty;
+                    return _pager.HousePageEmpty;
                 }
 
             }
@@ -124,12 +128,17 @@ namespace GameOfThrones.ViewModels
 
         public CharacterDetailsViewModel()
         {
-            pageSize = 10;
+            PageSize = 10;
             Allegiances = new ObservableCollection<House>();
             Books = new ObservableCollection<Book>();
         }
 
-
+        /// <summary>
+        /// Called when the page is navigatedTo, calls the base function and 
+        /// Start to load the given CharacterDetails.
+        /// Throws error if can't load 
+        /// </summary>
+        /// <param name="parameters"></param>
         public override async void Navigated(object parameters)
         {
             base.Navigated(parameters);
@@ -145,6 +154,11 @@ namespace GameOfThrones.ViewModels
         }
 
 
+        /// <summary>
+        /// 
+        /// Sets the visibility and the view availeable.
+        /// Should be Called when the requested functionality6event loaded/finished
+        /// </summary>
         protected override void Loaded()
         {
             base.Loaded();//Isbusy=false;
@@ -155,10 +169,15 @@ namespace GameOfThrones.ViewModels
             OnPropertyChanged(nameof(LoadMoreAllegiancesVisibility));//set visible if have to 
         }
 
+
+        /// <summary>
+        /// Loads the next page of <see cref="House"/> instances to the Allegiances
+        /// </summary>
+        /// <returns></returns>
         public async Task LoadAllegiances()
         {
             ADataLoaded = false;
-            ALoadMoreText = loadingText;
+            ALoadMoreText = s_LoadingText;
             OnPropertyChanged(nameof(LoadMoreAllegiancesVisibility));
 
             try
@@ -176,22 +195,37 @@ namespace GameOfThrones.ViewModels
             finally
             {
                 ADataLoaded = true;
-                ALoadMoreText = loadMoreText;
+                ALoadMoreText = s_LoadMoreText;
                 OnPropertyChanged(nameof(LoadMoreAllegiancesVisibility));
             }
         }
 
+        /// <summary>
+        /// Sets the BookList visible or collapsed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void ModifyBooksListView(object sender, RoutedEventArgs e)
         {
             BooksVisibility = BooksVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
         }
 
+        /// <summary>
+        /// Sets the Allegiances list visible, or collapsed
+        /// </summary>
+        /// <param name="sender"> the sender</param>
+        /// <param name="e">event arguments</param>
         public void ModifyAllegiancesVisibility(object sender, RoutedEventArgs e)
         {
             AllegiancesVisibility = AllegiancesVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
             OnPropertyChanged(nameof(LoadMoreAllegiancesVisibility));
         }
 
+        /// <summary>
+        /// Loads the next page of <see cref="Book"/> instances into <see cref="Books"/>
+        /// </summary>
+        /// <param name="bookURIs">the books that shoudl be loaded</param>
+        /// <returns></returns>
         private async Task LoadBooks(List<string> bookURIs)
         {
             var result = await DataService.GetBookReviews(bookURIs);
@@ -204,7 +238,7 @@ namespace GameOfThrones.ViewModels
 
         private async Task LoadNextAllegiances()
         {
-            var result = await Pager.GetNext();
+            var result = await _pager.GetNext();
             foreach (var item in result)
             {
                 Allegiances.Add(item);
@@ -231,7 +265,7 @@ namespace GameOfThrones.ViewModels
             var result = await DataService.GetCharacterDetails(id);
             SelectedCharacter = result.Item1;
             await LoadBooks(result.Item3);
-            Pager = new CharacterDetailsPager(result.Item2, pageSize);
+            _pager = new CharacterDetailsPager(result.Item2, PageSize);
             await LoadAllegiances();
             Loaded();
             //Load character and books and Data

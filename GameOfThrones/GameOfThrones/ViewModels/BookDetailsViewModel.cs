@@ -18,9 +18,9 @@ namespace GameOfThrones.ViewModels
         private Visibility _povCharacterViewVisibility = Visibility.Collapsed;
         private bool _cdataLoaded = false;
         private bool _povDataLoaded = false;
-        private string _cLoadMoreText = loadMoreText;
-        private string _povLoadMoreText = loadMoreText;
-        private BookDetailsPager characterPager;
+        private string _cLoadMoreText = s_LoadMoreText;
+        private string _povLoadMoreText = s_LoadMoreText;
+        private BookDetailsPager _characterPager;
 
         public bool CDataLoaded
         {
@@ -93,13 +93,13 @@ namespace GameOfThrones.ViewModels
         {
             get
             {
-                if (characterPager == null || _characterViewVisibility == Visibility.Collapsed)
+                if (_characterPager == null || _characterViewVisibility == Visibility.Collapsed)
                 {
                     return Visibility.Collapsed;
                 }
                 else
                 {
-                    return characterPager.IsCharacterListEmpty(Models.Resources.DataType.Character);
+                    return _characterPager.IsCharacterListEmpty(Models.Resources.DataType.Character);
                 }
 
             }
@@ -109,13 +109,13 @@ namespace GameOfThrones.ViewModels
         {
             get
             {
-                if (characterPager == null || _povCharacterViewVisibility == Visibility.Collapsed)
+                if (_characterPager == null || _povCharacterViewVisibility == Visibility.Collapsed)
                 {
                     return Visibility.Collapsed;
                 }
                 else
                 {
-                    return characterPager.IsCharacterListEmpty(Models.Resources.DataType.POVCharacter);
+                    return _characterPager.IsCharacterListEmpty(Models.Resources.DataType.POVCharacter);
                 }
 
             }
@@ -161,11 +161,17 @@ namespace GameOfThrones.ViewModels
 
         public BookDetailsViewModel()
         {
-            pageSize = 10;
+            PageSize = 10;
             Characters = new ObservableCollection<Character>();
             PovCharacters = new ObservableCollection<Character>();
         }
 
+
+        /// <summary>
+        /// Calls the base function and try to load the requested book on the details page.
+        /// Throws error if the requested page could not be loaded
+        /// </summary>
+        /// <param name="parameters">parameters sent by the other page/navigationService</param>
         public override async void Navigated(object parameters)
         {
             base.Navigated(parameters);
@@ -176,10 +182,14 @@ namespace GameOfThrones.ViewModels
             else
             {
                 URI = Parameters[1].ToString();
-                await this.LoadBook(URI);
+                await LoadBook(URI);
             }
         }
 
+
+        /// <summary>
+        /// Sets the view visible in case the requested data /event is laoded/finished
+        /// </summary>
         protected override void Loaded()
         {
             base.Loaded();//Isbusy=false;
@@ -193,10 +203,15 @@ namespace GameOfThrones.ViewModels
 
         }
 
+        /// <summary>
+        /// Loads the next page of characters
+        /// Shows error message if the API is not responding, or there are other issues accessing data
+        /// </summary>
+        /// <returns><see cref="Task"/></returns>
         public async Task LoadCharacters()
         {
             CDataLoaded = false;
-            CLoadMoreText = loadingText;
+            CLoadMoreText = s_LoadingText;
             OnPropertyChanged(nameof(LoadMoreCharactersVisibility));
             try
             {
@@ -213,16 +228,21 @@ namespace GameOfThrones.ViewModels
             finally
             {
                 CDataLoaded = true;
-                CLoadMoreText = loadMoreText;
+                CLoadMoreText = s_LoadMoreText;
                 OnPropertyChanged(nameof(LoadMoreCharactersVisibility));
 
             }
         }
 
+
+        /// <summary>
+        /// Loads the Next page of pov Characters
+        /// </summary>
+        /// <returns><see cref="Task"/></returns>
         public async Task LoadPOV()
         {
             POVDataLoaded = false;
-            POVLoadMoreText = loadingText;
+            POVLoadMoreText = s_LoadingText;
             try
             {
                 await LoadDataToList(PovCharacters, DataType.POVCharacter);
@@ -238,26 +258,44 @@ namespace GameOfThrones.ViewModels
             finally
             {
                 POVDataLoaded = true;
-                POVLoadMoreText = loadMoreText;
+                POVLoadMoreText = s_LoadMoreText;
                 OnPropertyChanged(nameof(LoadMorePOVCharactersVisibility));
             }
         }
 
-        public async Task LoadDataToList(ObservableCollection<Character> characters, DataType type)
+
+        /// <summary>
+        /// Loads the requested type of character page to the view, using pager
+        /// </summary>
+        /// <param name="characters">the view element to be loaded into </param>
+        /// <param name="type">the type of character <see cref="DataType"/></param>
+        /// <returns></returns>
+        private async Task LoadDataToList(ObservableCollection<Character> characters, DataType type)
         {
-            var result = await characterPager.GetNext(type);
+            var result = await _characterPager.GetNext(type);
             foreach (var item in result)
             {
                 characters.Add(item);
             }
         }
 
+
+        /// <summary>
+        /// called upon when the ListView Title button is clicked, sets the view visible, or collapsed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void ModifyCharacterListView(object sender, RoutedEventArgs e)
         {
             CharactersVisibility = CharactersVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
             OnPropertyChanged(nameof(LoadMoreCharactersVisibility));
         }
 
+        /// <summary>
+        /// Called upon when the ListView Title button is clicked sets the view visible or collapsed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void ModifyPOVCharacterListView(object sender, RoutedEventArgs e)
         {
             POVCharactersVisibility = POVCharactersVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
@@ -284,7 +322,7 @@ namespace GameOfThrones.ViewModels
         {
             var result = await DataService.GetBookDetails(id);
             SelectedBook = result.Item1;
-            characterPager = new BookDetailsPager(result.Item2, result.Item3, pageSize);
+            _characterPager = new BookDetailsPager(result.Item2, result.Item3, PageSize);
             await LoadDataToList(Characters, DataType.Character);
             await LoadDataToList(PovCharacters, DataType.POVCharacter);
             Loaded();

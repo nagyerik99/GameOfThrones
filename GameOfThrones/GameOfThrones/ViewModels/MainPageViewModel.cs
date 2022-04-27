@@ -8,10 +8,13 @@ using Windows.UI.Xaml.Navigation;
 
 namespace GameOfThrones.ViewModels
 {
+    /// <summary>
+    /// Viewmodel for the MainPageView
+    /// </summary>
     public class MainPageViewModel : ViewModelBase
     {
-        private IUIService uiService;
-        private ErrorService errorService;
+        private IUIService _uiService;
+        private ErrorService _errorService;
 
         private readonly List<(string Tag, Type Page)> _pages = new List<(string, Type Page)>
             {
@@ -30,34 +33,45 @@ namespace GameOfThrones.ViewModels
 
         public IUIService UIService
         {
-            get { return uiService; }
+            get { return _uiService; }
             set
             {
-                if (uiService == null)
+                if (_uiService == null)
                 {
-                    uiService = value;
-                    errorService = new ErrorService(uiService);
+                    _uiService = value;
+                    _errorService = new ErrorService(_uiService);
                 }
             }
         }
 
-
+        /// <summary>
+        /// Called when the actual first view is loaded
+        /// </summary>
+        /// <param name="index"></param>
         public void ViewLoaded(int index)
         {
             NavigateView(_pages[index].Tag);
         }
 
-
+        /// <summary>
+        /// Navigates to the pages that has the given tag, if it is not null
+        /// </summary>
+        /// <param name="navItemTag"></param>
         public void NavigateView(string navItemTag)
         {
             var (Tag, Page) = _pages.FirstOrDefault(p => p.Tag.Equals(navItemTag));
 
-            var preNavPageType = navigationService.PrevPageType;
+            var preNavPageType = NavigationService.PrevPageType;
 
             if (!(Page is null) && !Type.Equals(preNavPageType, Page))
-                navigationService.NavigateTo(Page, new object[] { navigationService });
+                NavigationService.NavigateTo(Page, new object[] { NavigationService });
         }
 
+        /// <summary>
+        /// Called, when the selection of the navigationItems changed due to the navigation
+        /// </summary>
+        /// <param name="page"></param>
+        /// <returns></returns>
         public int SelectionChanged(Type page)
         {
             var mainPage = _pages.FirstOrDefault(x => x.Page == page);
@@ -76,12 +90,15 @@ namespace GameOfThrones.ViewModels
         }
 
 
+        /// <summary>
+        /// Called when tha navigation is failed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void NavigationFailed(object sender, NavigationFailedEventArgs e)
         {
-            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
+            ErrorService.Instance.ShowErrorMessage(typeof(Exception));
         }
-
-
 
     }
 }

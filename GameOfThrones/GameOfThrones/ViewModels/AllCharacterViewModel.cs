@@ -15,7 +15,7 @@ namespace GameOfThrones.ViewModels
         private ObservableCollection<Character> _allCharacter;
         private Visibility _loadMoreVisibility = Visibility.Collapsed;
 
-        private int pageNum;
+        private int _pageNum;
         private bool _loadMoreEnabled = true;
 
         public bool LoadMoreEnabled
@@ -57,11 +57,11 @@ namespace GameOfThrones.ViewModels
             {
                 if (_loadMoreEnabled)
                 {
-                    return loadMoreText;
+                    return s_LoadMoreText;
                 }
                 else
                 {
-                    return loadingText;
+                    return s_LoadingText;
                 }
             }
         }
@@ -83,19 +83,27 @@ namespace GameOfThrones.ViewModels
 
         public AllCharacterViewModel()
         {
-            pageSize = 50;
-            pageNum = 1;
-            _searchEnabled = true;
+            PageSize = 50;
+            _pageNum = 1;
             Characters = new ObservableCollection<Character>();
             _allCharacter = new ObservableCollection<Character>();
         }
 
+
+        /// <summary>
+        /// Calls the <see cref="ViewModelBase"/> Navigated function and starts the Laoding of the <see cref="Character"/>s
+        /// </summary>
+        /// <param name="parameters"></param>
         public override async void Navigated(object parameters)
         {
             base.Navigated(parameters);
             await LoadCharacters();
         }
 
+        /// <summary>
+        /// Loads the next page of characters
+        /// </summary>
+        /// <returns></returns>
         public async Task LoadCharacters()
         {
             if (!_loadMoreEnabled)
@@ -107,7 +115,7 @@ namespace GameOfThrones.ViewModels
             {
                 await GetData(); // Loading Characters to List
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException e)//there is no connection, or file not found
             {
                 ErrorService.Instance.ShowErrorMessage(e.GetType(), LoadCharacters);
             }
@@ -117,13 +125,14 @@ namespace GameOfThrones.ViewModels
             }
         }
 
+
         private async Task GetData()
         {
-            List<Character> result = await DataService.GetCharacterPage(pageNum, pageSize);
-            pageNum++;
+            List<Character> result = await DataService.GetCharacterPage(_pageNum, PageSize);
+            _pageNum++;
 
             //because if only <pageSize was loaded than it was the last of them
-            if (result.Count == 0 || result.Count != pageSize)
+            if (result.Count == 0 || result.Count != PageSize)
             {
                 LoadMoreVisibility = Visibility.Collapsed;
                 LoadMoreEnabled = false;

@@ -12,6 +12,9 @@ namespace GameOfThrones.ViewModels
         private ObservableCollection<Book> _bookSeries = new ObservableCollection<Book>();
         private ObservableCollection<Book> _allbookSeries = new ObservableCollection<Book>();
 
+        /// <summary>
+        /// The BookSeries provided by the API
+        /// </summary>
         public ObservableCollection<Book> BookSeries
         {
             get
@@ -28,9 +31,13 @@ namespace GameOfThrones.ViewModels
         public AllBookViewModel()
         {
             BookSeries = new ObservableCollection<Book>();
-            _searchEnabled = true;
         }
 
+
+        /// <summary>
+        /// Calls the <see cref="ViewModelBase"/> functionality and starts the loading of the Bookseries
+        /// </summary>
+        /// <param name="parameters"></param>
         public override async void Navigated(object parameters)
         {
             base.Navigated(parameters);
@@ -38,6 +45,12 @@ namespace GameOfThrones.ViewModels
             await LoadBookSeries();
         }
 
+
+        /// <summary>
+        /// Loads the Bookseries provided by the API
+        /// async method because of API access
+        /// </summary>
+        /// <returns></returns>
         public async Task LoadBookSeries()
         {
             try

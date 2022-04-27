@@ -8,9 +8,15 @@ using System.Net.Http;
 
 namespace GameOfThrones.Services
 {
+    /// <summary>
+    /// <list type="bullet">
+    /// <item> Responsible for requesting, the neccessary datas from the API server.</item>
+    /// <item>Static class</item>
+    /// </list>
+    /// </summary>
     public static class DataService
     {
-        private static readonly Uri serverUrl = new Uri("https://anapioficeandfire.com/api/");
+        private static readonly Uri _serverUrl = new Uri("https://anapioficeandfire.com/api/");
 
         private static async Task<T> GetAsync<T>(Uri uri)
         {
@@ -23,15 +29,29 @@ namespace GameOfThrones.Services
             }
         }
 
+        /// <summary>
+        /// Loading the Bookseries determined, by the API
+        /// </summary>
+        /// <returns>The List of <see cref="Book"/> instances</returns>
         public async static Task<List<Book>> GetBookSeries()
         {
-            var bookDTOs = await GetAsync<List<BookDTO>>(new Uri(serverUrl, "books"));
+            var bookDTOs = await GetAsync<List<BookDTO>>(new Uri(_serverUrl, "books?page=1&pageSize=20"));
 
             var result = await DataMappingService.MappReviews(bookDTOs);
             return result;
         }
 
 
+        /// <summary>
+        /// <para>
+        /// <list type="bullet">
+        /// <item>Returns the <see cref="Book"/> instance of the given <paramref name="ID"/> if has one.</item>
+        /// <item>Also returns the ID-s/URI-s of the book's characters and povCharacters, for future paging purposes</item>
+        /// </list>
+        /// </para>
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
         public async static Task<(Book, List<string>, List<string>)> GetBookDetails(string ID)
         {
             var bookDTO = await GetAsync<BookDTO>(new Uri(ID));
@@ -39,10 +59,21 @@ namespace GameOfThrones.Services
             return (bookBase, bookDTO.Characters, bookDTO.POVCharacters);
         }
 
+        /// <summary>
+        /// <para>
+        /// <list type="bullet">
+        /// <item>Returns the <see cref="Character"/> instance of the given <paramref name="ID"/> if has one.</item>
+        /// <item>Also returns the ID-s/URI-s of the characters's allegiances (<see cref="HouseDTO"/> URI-s) 
+        /// and books which mentiones the character, for future paging purposes</item>
+        /// </list>
+        /// </para>
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns>The character and the data associated with it</returns>
         public async static Task<(Character, List<string>, List<string>)> GetCharacterDetails(string ID)
         {
             CharacterDTO characterDTO = await GetAsync<CharacterDTO>(new Uri(ID));
-            Character character = DataMappingService.MappReview(characterDTO);
+            Character character = DataMappingService.MappReview(characterDTO,true);
             List<string> familyUris = new List<string> { characterDTO.Father, characterDTO.Mother, characterDTO.Spouse };
 
             List<Character> family = await GetCharacterReviews(familyUris);
@@ -54,6 +85,12 @@ namespace GameOfThrones.Services
             return (character, characterDTO.Allegiances, characterDTO.Books);
         }
 
+
+        /// <summary>
+        /// Returns the <see cref="Character"/>'s associated with the requested URIs
+        /// </summary>
+        /// <param name="characterURIs">the requested <see cref="Character"/>'s URIs</param>
+        /// <returns>the list of <see cref="Character"/></returns>
         public async static Task<List<Character>> GetCharacterReviews(List<string> characterURIs)
         {
             List<Character> characters = new List<Character>();
@@ -75,6 +112,11 @@ namespace GameOfThrones.Services
             return characters;
         }
 
+        /// <summary>
+        /// Returns the <see cref="House"/>s associated with the requested URIs
+        /// </summary>
+        /// <param name="houseURIs">the requested URIs</param>
+        /// <returns>The Requested List of <see cref="House"/>s</returns>
         public async static Task<List<House>> GetHouseReviews(List<string> houseURIs)
         {
             List<House> houses = new List<House>();
@@ -97,6 +139,18 @@ namespace GameOfThrones.Services
             return houses;
         }
 
+
+        /// <summary>
+        /// <para>
+        /// <list type="bullet">
+        /// <item>Returns the <see cref="House"/> instance of the given <paramref name="uri"/> if has one.</item>
+        /// <item>Also returns the ID-s/URI-s of the house members (<see cref="Character"/> URI-s) 
+        /// and <see cref="House"/> URIs as cadetBranches, for future paging purposes</item>
+        /// </list>
+        /// </para>
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <returns></returns>
         public async static Task<(House, List<string>, List<string>)> GetHouseDetails(string uri)
         {
             HouseDTO houseDTO = await GetAsync<HouseDTO>(new Uri(uri));
@@ -113,6 +167,11 @@ namespace GameOfThrones.Services
             return (houseBase, houseDTO.SwornMembers, houseDTO.CadetBranches);
         }
 
+        /// <summary>
+        /// Return a List of <see cref="Book"/> isntances, associated with <paramref name="bookURIs"/>
+        /// </summary>
+        /// <param name="bookURIs">the requested Book ID's</param>
+        /// <returns>The list of <see cref="Book"/> result</returns>
         public async static Task<List<Book>> GetBookReviews(List<string> bookURIs)
         {
             List<BookDTO> bookDTOs = new List<BookDTO>();
@@ -131,9 +190,16 @@ namespace GameOfThrones.Services
             return books;
         }
 
+
+        /// <summary>
+        /// Returns the next page of Characters.
+        /// </summary>
+        /// <param name="pageNum">the requested page</param>
+        /// <param name="PageSize">the requested amount of Characters on the page</param>
+        /// <returns>the next page in the form of collection of <see cref="Character"/></returns>
         public async static Task<List<Character>> GetCharacterPage(int pageNum, int PageSize)
         {
-            UriBuilder uriBuilder = new UriBuilder(new Uri(serverUrl, "characters"));
+            UriBuilder uriBuilder = new UriBuilder(new Uri(_serverUrl, "characters"));
             uriBuilder.Query += $"page={pageNum}";
             uriBuilder.Query += $"&pageSize={PageSize}";
 
@@ -142,9 +208,15 @@ namespace GameOfThrones.Services
             return DataMappingService.MappReviews(characterDTOs);
         }
 
+        /// <summary>
+        /// Returns the next page of Houses
+        /// </summary>
+        /// <param name="pageNum">the next requested page</param>
+        /// <param name="PageSize">the amount of data of the requested page</param>
+        /// <returns>The requested Page, in the form of <see cref="House"/> collection</returns>
         public async static Task<List<House>> GetHousePage(int pageNum, int PageSize)
         {
-            UriBuilder uriBuilder = new UriBuilder(new Uri(serverUrl, "houses"));
+            UriBuilder uriBuilder = new UriBuilder(new Uri(_serverUrl, "houses"));
             uriBuilder.Query += $"page={pageNum}";
             uriBuilder.Query += $"&pageSize={PageSize}";
 

@@ -5,13 +5,12 @@
     xmlns:local="using:GameOfThrones.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    xmlns:m ="using:GameOfThrones.Models"
-    xmlns:vm ="using:GameOfThrones.ViewModels"
+    xmlns:vm="using:GameOfThrones.ViewModels"
+    xmlns:m="using:GameOfThrones.Models"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    Background="#261E1D"
-    Foreground="#BEB8AF"
-    FontSize="16"
+    mc:Ignorable="d"
+    Background="{StaticResource GameOfThronesBackgroundColor}"
+    Foreground="{StaticResource GameOfThronesForegroundColor}"
     >
 
     <Page.DataContext>
@@ -19,18 +18,17 @@
     </Page.DataContext>
 
     <Grid>
-        <controls:Loading x:Name="LoadingControl" IsLoading="{Binding IsBusy, Mode=OneWay}" Opacity="0.3">
+        <controls:Loading x:Name="LoadingControl" IsLoading="{Binding IsBusy, Mode=OneWay}" Opacity="0.8">
             <StackPanel Orientation="Horizontal" Padding="12">
                 <Grid Margin="0,0,8,0">
-                    <ProgressRing IsActive="True"/>
+                    <ProgressRing IsActive="True" Foreground="{StaticResource GameOfThronesButtonColor}"/>
                 </Grid>
-                <TextBlock Text="Loading..." VerticalAlignment="Center" />
+                <TextBlock Text="Loading..." VerticalAlignment="Center"  Style="{StaticResource GameOfThronesLoadingText}"/>
             </StackPanel>
         </controls:Loading>
-
         <Frame x:Name="BookDetailsFrame" Visibility="{x:Bind ViewModel.ViewLoadingVisibility, Mode=OneWay}">
             <StackPanel Orientation="Vertical"  Margin="20">
-                <Grid Margin="50,10,20,10" Padding="5,0">
+                <Grid Style="{StaticResource GameOfThronesGrid}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="200"/>
                         <ColumnDefinition Width="100"/>
@@ -46,67 +44,60 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="Title" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="10" Text="{x:Bind ViewModel.SelectedBook.Name, Mode=OneWay}" TextWrapping="Wrap" FontSize="24" Margin="0,5"/>
-                    <Image Grid.Column="0" Grid.Row="1" Grid.RowSpan="7" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="BookCover" Stretch="Uniform" Width="200" Height="Auto"  Source="{x:Bind ViewModel.SelectedBook.Path, Mode=OneWay}"/>
+                    <TextBlock x:Name="Title" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="10" Text="{x:Bind ViewModel.SelectedBook.Name, Mode=OneWay}" Style="{StaticResource GameOfThronesDetailsTitleStyle}"/>
+                    <Image Grid.Column="0" Grid.Row="1" Grid.RowSpan="7" x:Name="BookCover" Stretch="Uniform" Width="200" Height="Auto"  Source="{x:Bind ViewModel.SelectedBook.Path, Mode=OneWay}"/>
 
-                    <TextBlock Text="ISBN:" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,5"/>
-                    <TextBlock  Grid.Column="2" Grid.Row="1" x:Name="ISBN"  Text="{x:Bind ViewModel.SelectedBook.ISBN, Mode=OneWay}" TextWrapping="Wrap" Margin="5,5"/>
+                    <TextBlock Text="ISBN:" Grid.Column="1" Grid.Row="1"  Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <TextBlock  Grid.Column="2" Grid.Row="1" x:Name="ISBN"  Text="{x:Bind ViewModel.SelectedBook.ISBN, Mode=OneWay}" Style="{StaticResource GameOfThronesDetailStyle}"/>
 
-                    <TextBlock Text="Authors:" Grid.Column="1" Grid.Row="2" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,5"/>
-                    <TextBlock  Grid.Column="2" Grid.Row="2" x:Name="Authors" Text="{x:Bind ViewModel.SelectedBook.Authors, Mode=OneWay}" TextWrapping="Wrap" Margin="5,5"/>
+                    <TextBlock Text="Authors:" Grid.Column="1" Grid.Row="2" Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <TextBlock  Grid.Column="2" Grid.Row="2" x:Name="Authors" Text="{x:Bind ViewModel.SelectedBook.Authors, Mode=OneWay}" Style="{StaticResource GameOfThronesDetailStyle}"/>
 
-                    <TextBlock Text="Released:" Grid.Column="1" Grid.Row="3" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,5"/>
-                    <TextBlock  Grid.Column="2" Grid.Row="3" x:Name="Released" Text="{x:Bind ViewModel.SelectedBook.Released, Mode=OneWay}" TextWrapping="Wrap" Margin="5,5"/>
+                    <TextBlock Text="Released:" Grid.Column="1" Grid.Row="3" Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <TextBlock  Grid.Column="2" Grid.Row="3" x:Name="Released" Text="{x:Bind ViewModel.SelectedBook.Released, Mode=OneWay}" Style="{StaticResource GameOfThronesDetailStyle}"/>
 
-                    <TextBlock Text="Publisher:" Grid.Column="1" Grid.Row="4" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,5"/>
-                    <TextBlock  Grid.Column="2" Grid.Row="4" x:Name="Publisher" Text="{x:Bind ViewModel.SelectedBook.Publisher, Mode=OneWay}" TextWrapping="Wrap" Margin="5,5"/>
+                    <TextBlock Text="Publisher:" Grid.Column="1" Grid.Row="4" Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <TextBlock  Grid.Column="2" Grid.Row="4" x:Name="Publisher" Text="{x:Bind ViewModel.SelectedBook.Publisher, Mode=OneWay}" Style="{StaticResource GameOfThronesDetailStyle}"/>
 
-                    <TextBlock Text="Country:" Grid.Column="1" Grid.Row="5" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,5"/>
-                    <TextBlock  Grid.Column="2" Grid.Row="5" x:Name="Country" Text="{x:Bind ViewModel.SelectedBook.Country, Mode=OneWay}" TextWrapping="Wrap" Margin="5,5"/>
+                    <TextBlock Text="Country:" Grid.Column="1" Grid.Row="5" Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <TextBlock  Grid.Column="2" Grid.Row="5" x:Name="Country" Text="{x:Bind ViewModel.SelectedBook.Country, Mode=OneWay}" Style="{StaticResource GameOfThronesDetailStyle}"/>
 
-                    <TextBlock Text="Type:" Grid.Column="1" Grid.Row="6" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,5"/>
-                    <TextBlock  Grid.Column="2" Grid.Row="6" x:Name="MediaType" Text="{x:Bind ViewModel.SelectedBook.MediaType, Mode=OneWay}" TextWrapping="Wrap" Margin="5,5"/>
+                    <TextBlock Text="Type:" Grid.Column="1" Grid.Row="6" Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <TextBlock  Grid.Column="2" Grid.Row="6" x:Name="MediaType" Text="{x:Bind ViewModel.SelectedBook.MediaType, Mode=OneWay}" Style="{StaticResource GameOfThronesDetailStyle}"/>
 
-                    <TextBlock Text="Pages:" Grid.Column="1" Grid.Row="7" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,5"/>
-                    <TextBlock  Grid.Column="2" Grid.Row="7" x:Name="NumOfPages" Text="{x:Bind ViewModel.SelectedBook.NumOfPages, Mode=OneWay}" TextWrapping="Wrap" Margin="5,5"/>
+                    <TextBlock Text="Pages:" Grid.Column="1" Grid.Row="7" Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <TextBlock  Grid.Column="2" Grid.Row="7" x:Name="NumOfPages" Text="{x:Bind ViewModel.SelectedBook.NumOfPages, Mode=OneWay}" Style="{StaticResource GameOfThronesDetailStyle}"/>
                 </Grid>
                 <Button x:Name="CharactersButton"
                         Click="{x:Bind ViewModel.ModifyCharacterListView}" Content="Characters"
-                        Foreground="#BEB8AF" Background=" #423730" HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Left"
-                        FontStyle="Oblique"
-                        Margin="0,10"
-                        />
+                        Style="{StaticResource GameOfThronesButtonStyle}"
+                />
+
                 <ListView x:Name="CharactersListView"
                           ItemsSource="{x:Bind ViewModel.Characters, Mode=OneWay}"
                           Visibility="{x:Bind ViewModel.CharactersVisibility, Mode=OneWay}"
                           ItemClick="CharactersListView_ItemClick"
                           IsItemClickEnabled="True">
                     <ListView.ItemTemplate>
-                        <DataTemplate x:Name="CharacterViewTemplate" x:DataType="m:Character">
-                            <controls:WrapPanel Orientation="Horizontal" Margin="0,5" VerticalAlignment="Center">
-                                <TextBlock Text="{x:Bind Name}" TextWrapping="Wrap"/>
-                                <TextBlock Text="--" Margin="5,0" TextWrapping="Wrap"/>
-                                <TextBlock Text="{x:Bind Aliases}" FontStyle="Italic" TextWrapping="Wrap"/>
+                        <DataTemplate x:Name="CharacterListViewTemplate" x:DataType="m:Character">
+                            <controls:WrapPanel Style="{StaticResource GameOfThronesWrapPanel}">
+                                <TextBlock Text="{x:Bind Name}" Style="{StaticResource GameOfThronesListItemTitleStyle}"/>
+                                <TextBlock Text="{x:Bind Aliases}" Style="{StaticResource GameOfThronesListViewItemBodyStyle}"/>
                             </controls:WrapPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <Button x:Name="LodeMoreCharacterButton" Click="LodeMoreCharacterButton_Click" Visibility="{x:Bind ViewModel.LoadMoreCharactersVisibility, Mode=OneWay}"
+                
+                <Button x:Name="LodeMoreCharacterButton" Click="LodeMoreCharacterButton_Click" 
+                        Visibility="{x:Bind ViewModel.LoadMoreCharactersVisibility, Mode=OneWay}"
                         Content="{x:Bind ViewModel.CLoadMoreText, Mode=OneWay}"
                         IsEnabled="{x:Bind ViewModel.CDataLoaded, Mode=OneWay}"
-                        Foreground="#BEB8AF" Background="#261E1D"
-                        FontStyle="Oblique"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                        Style="{StaticResource GameOfThronesLoadMoreButtonStyle}"/>
+
                 <Button x:Name="POVCharactersButton"
                         Click="{x:Bind ViewModel.ModifyPOVCharacterListView}"
                         Content="POVCharacters"
-                        Foreground="#BEB8AF"
-                        Background=" #423730"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Left"
-                        FontStyle="Oblique"
-                        Margin="0,10"
+                        Style="{StaticResource GameOfThronesButtonStyle}"
                         />
                 <ListView x:Name="POVCharactersListView"
                           ItemsSource="{x:Bind ViewModel.PovCharacters,Mode=OneWay}"
@@ -115,12 +106,11 @@
                           IsItemClickEnabled="True"
                           >
                     <ListView.ItemTemplate>
-                        <DataTemplate x:Name="POVCharacterViewTemplate" x:DataType="m:Character">
-                            <controls:WrapPanel Orientation="Horizontal" Margin="0,5" VerticalAlignment="Center">
-                                <TextBlock Text="{x:Bind Name}" TextWrapping="Wrap"/>
-                                <TextBlock Text="--" Margin="5,0" TextWrapping="Wrap"/>
-                                <TextBlock Text="{x:Bind Aliases}" FontStyle="Italic" TextWrapping="Wrap"/>
-                            </controls:WrapPanel>
+                        <DataTemplate x:Name="POVCharacterListViewTemplate" x:DataType="m:Character">
+                            <controls:WrapPanel Style="{StaticResource GameOfThronesWrapPanel}">
+                                <TextBlock Text="{x:Bind Name}" Style="{StaticResource GameOfThronesListItemTitleStyle}"/>
+                                <TextBlock Text="{x:Bind Aliases}" Style="{StaticResource GameOfThronesListViewItemBodyStyle}"/>
+                            </controls:WrapPanel>                        
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -129,9 +119,7 @@
                         Visibility="{x:Bind ViewModel.LoadMorePOVCharactersVisibility, Mode=OneWay}"
                         Content="{x:Bind ViewModel.POVLoadMoreText, Mode=OneWay}"
                         IsEnabled="{x:Bind ViewModel.POVDataLoaded, Mode=OneWay}"
-                        Foreground="#BEB8AF" Background="#261E1D"
-                        FontStyle="Oblique"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                        Style="{StaticResource GameOfThronesLoadMoreButtonStyle}"/>
             </StackPanel>
         </Frame>
     </Grid>

@@ -19,7 +19,5 @@ namespace GameOfThrones.Models.DTO
         public List<string> Allegiances { get; set; }
         public List<string> Books { get; set; }
         public List<string> POVBooks { get; set; }
-        //public List<string> TvSeries { get; set; }
-        //public List<string> PlayedBy { get; set; }
     }
 }

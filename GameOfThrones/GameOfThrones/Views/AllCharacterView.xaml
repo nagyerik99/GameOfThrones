@@ -9,8 +9,8 @@
     xmlns:m ="using:GameOfThrones.Models" 
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
-    Background="#002C3A"
-    Foreground="White"
+    Background="{StaticResource GameOfThronesBackgroundColor}"
+    Foreground="{StaticResource GameOfThronesForegroundColor}"
     >
 
     <Page.DataContext>
@@ -18,12 +18,12 @@
     </Page.DataContext>
 
     <Grid>
-        <controls:Loading x:Name="LoadingControl" IsLoading="{Binding IsBusy, Mode=OneWay}" Opacity="0.5">
+        <controls:Loading x:Name="LoadingControl" IsLoading="{Binding IsBusy, Mode=OneWay}" Opacity="0.8">
             <StackPanel Orientation="Horizontal" Padding="12">
                 <Grid Margin="0,0,8,0">
-                    <ProgressRing IsActive="True"/>
+                    <ProgressRing IsActive="True" Foreground="{StaticResource GameOfThronesButtonColor}"/>
                 </Grid>
-                <TextBlock Text="Loading..." VerticalAlignment="Center" />
+                <TextBlock Text="Loading..." VerticalAlignment="Center" Style="{StaticResource GameOfThronesLoadingText}"/>
             </StackPanel>
         </controls:Loading>
 
@@ -35,20 +35,18 @@
                           IsItemClickEnabled="True">
                     <ListView.ItemTemplate>
                         <DataTemplate x:Name="CharacterViewTemplate" x:DataType="m:Character">
-                            <controls:WrapPanel Orientation="Horizontal" Margin="0,5">
-                                <TextBlock Text="{x:Bind Name}" TextWrapping="Wrap"/>
-                                <TextBlock Text="--" Margin="5,0" TextWrapping="Wrap"/>
-                                <TextBlock Text="{x:Bind Aliases}" FontStyle="Italic" TextWrapping="Wrap"/>
+                            <controls:WrapPanel Style="{StaticResource GameOfThronesWrapPanel}">
+                                <TextBlock Text="{x:Bind Name}" Style="{StaticResource GameOfThronesListItemTitleStyle}"/>
+                                <TextBlock Text="{x:Bind Aliases}" Style="{StaticResource GameOfThronesListViewItemBodyStyle}"/>
                             </controls:WrapPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
 
-                <Button Foreground="#002C3A" x:Name="LoadMoreButton"
+                <Button Style="{StaticResource GameOfThronesLoadMoreButtonStyle}" x:Name="LoadMoreButton"
                     Visibility="{x:Bind ViewModel.LoadMoreVisibility, Mode=OneWay}"
                     Content="{x:Bind ViewModel.LoadMoreText, Mode=OneWay}" HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Center"
-                    Background="#3088AE"
                     Click="LoadMoreButton_Click"
                     IsEnabled="{x:Bind ViewModel.LoadMoreEnabled, Mode=OneWay}"
                     />

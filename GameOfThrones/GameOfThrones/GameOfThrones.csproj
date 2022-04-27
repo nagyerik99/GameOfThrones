@@ -141,7 +141,7 @@
     <Compile Include="Views\AllHousesView.xaml.cs">
       <DependentUpon>AllHousesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\App.xaml.cs">
+    <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\BookDetailsView.xaml.cs">
@@ -177,7 +177,6 @@
     <Content Include="Assets\Images\a_game_of_thrones.jpg" />
     <Content Include="Assets\Images\a_knight_of_the_seven_kingdoms.jpg" />
     <Content Include="Assets\Images\a_storm_of_swords.jpg" />
-    <Content Include="Assets\Images\song_of_ice_and_fire.png" />
     <Content Include="Assets\Images\the_hedge_knight.jpg" />
     <Content Include="Assets\Images\the_mystery_knight.jpg" />
     <Content Include="Assets\Images\the_princess_and_the_queen.jpg" />
@@ -194,10 +193,14 @@
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="Views\App.xaml">
+    <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Themes\GoTResource.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AllBookView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -241,9 +244,7 @@
       <Version>13.0.1</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Components\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

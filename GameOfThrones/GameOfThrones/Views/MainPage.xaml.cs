@@ -9,10 +9,12 @@ using static GameOfThrones.Services.ErrorService;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-namespace GameOfThrones
+namespace GameOfThrones.Views
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// MainPage that contains the main navigation functionality, and appearance services.
+    /// <para>Implements the <see cref="IPageNavigation"/> interface, and <see cref="IUIService"/> interface,
+    /// for navigation, and to show the sent error/dialog messages</para>
     /// </summary>
     public sealed partial class MainPage : Page, IPageNavigation, IUIService
     {
@@ -24,16 +26,27 @@ namespace GameOfThrones
         public MainPage()
         {
             this.InitializeComponent();
-            ViewModel.navigationService = this;
+            ViewModel.NavigationService = this;
             ViewModel.UIService = this;
         }
 
+        /// <summary>
+        /// Called when the navigationview is loaded
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NavView_Loaded(object sender, RoutedEventArgs e)
         {
             NavigationView.SelectedItem = NavigationView.MenuItems[0];
             ViewModel.ViewLoaded(0);
         }
 
+
+        /// <summary>
+        /// Responsible, for handling the changed navigation item selection
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
             if (args.InvokedItemContainer != null)
@@ -43,6 +56,12 @@ namespace GameOfThrones
             }
         }
 
+        /// <summary>
+        /// Called, through to the navigationService, when an other page is requested
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
         public bool NavigateTo(Type page, object[] param)
         {
             var result = ContentFrame.Navigate(page, param);
@@ -61,15 +80,23 @@ namespace GameOfThrones
                 NavigationView.SelectedItem = NavigationView.MenuItems[index];
         }
 
+
+        /// <summary>
+        /// called, when through navigationservice back is requested
+        /// </summary>
         public void GoBack()
         {
             if (ViewModel.CanGoBack())
             {
                 ContentFrame.GoBack();
-                ViewModel.SelectionChanged(ContentFrame.CurrentSourcePageType);
+                SelectionChanged(ContentFrame.CurrentSourcePageType);
             }
         }
 
+        /// <summary>
+        /// Determines, wheter the navigation/page history has any other element, for loading
+        /// </summary>
+        /// <returns></returns>
         public bool CanGoBack()
         {
             return ContentFrame.CanGoBack;
@@ -81,6 +108,15 @@ namespace GameOfThrones
                 ViewModel.GoBack();
         }
 
+
+        /// <summary>
+        /// Implemnets the <see cref="IUIService"/> interface <see cref="ShowErrorDialog(string, string, EventOnClose, Func{Task})"/> function
+        /// to show the error/dialog messages , sent by the <see cref="ErrorService"/>
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        /// <param name="onClose"></param>
+        /// <param name="handler"></param>
         public async void ShowErrorDialog(string title, string message, EventOnClose onClose, Func<Task> handler)
         {
             MessageDialog messageDialog = new MessageDialog(message)

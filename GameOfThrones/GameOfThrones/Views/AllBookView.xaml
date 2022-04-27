@@ -1,26 +1,28 @@
-﻿<Page
-    x:Class="GameOfThrones.Views.AllBookView"
+﻿<Page x:Class="GameOfThrones.Views.AllBookView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:GameOfThrones.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
     xmlns:vm="using:GameOfThrones.ViewModels"
     xmlns:m="using:GameOfThrones.Models"
-    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    mc:Ignorable="d"
-    Background="#261E1D"
-    Foreground="White"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls" xmlns:Windows10version1903="http://schemas.microsoft.com/winfx/2006/xaml/presentation?IsApiContractPresent(Windows.Foundation.UniversalApiContract, 8)"
+    Background="{StaticResource GameOfThronesBackgroundColor}"
+    Foreground="{StaticResource GameOfThronesForegroundColor}"
     >
 
+    <Page.Resources>
+        <Windows10version1903:ThemeShadow x:Name="ImageShadow"/>
+    </Page.Resources>
+
     <Grid>
-        <controls:Loading x:Name="LoadingControl" IsLoading="{Binding IsBusy, Mode=OneWay}" Opacity="0.5">
+        <controls:Loading x:Name="LoadingControl" IsLoading="{Binding IsBusy, Mode=OneWay}" Opacity="0.8">
             <StackPanel Orientation="Horizontal" Padding="12">
                 <Grid Margin="0,0,8,0">
-                    <!--<Image Source="../../Assets/ToolkitLogo.png" Height="50" />-->
-                    <ProgressRing IsActive="True"/>
+                    <ProgressRing IsActive="True" Foreground="{StaticResource GameOfThronesButtonColor}"/>
                 </Grid>
-                <TextBlock Text="Loading..." VerticalAlignment="Center" />
+                <TextBlock Text="Loading..." VerticalAlignment="Center" Style="{StaticResource GameOfThronesLoadingText}"/>
             </StackPanel>
         </controls:Loading>
 
@@ -39,19 +41,20 @@
                             </Grid.ColumnDefinitions>
 
                             <Image Grid.Column="0"
-                           Source="{x:Bind Path}"
-                           Width="Auto" Height="100"
-                           Margin="10"
-                           />
+                                   Source="{x:Bind Path}"
+                                   Width="140" Height="200"
+                                   Stretch="Fill"
+                                   Margin="10"/>
 
                             <StackPanel Grid.Column="1" Margin="10" Spacing="5">
-                                <TextBlock
-                        Text="{x:Bind Name}"
+                                <TextBlock   Text="{x:Bind Name}"
+                                             Style="{StaticResource GameOfThronesListItemTitleStyle}"
                         />
-                                <TextBlock
-                        Text="{x:Bind Authors}"
+                                <TextBlock  Text="{x:Bind Authors}"
+                                            Style="{StaticResource GameOfThronesListViewItemSubTitleStyle}"
                         />
-                                <TextBlock Text="{x:Bind Released}"/>
+                                <TextBlock Text="{x:Bind Released}"
+                                           Style="{StaticResource GameOfThronesListViewItemBodyStyle}"/>
                             </StackPanel>
                         </Grid>
                     </DataTemplate>

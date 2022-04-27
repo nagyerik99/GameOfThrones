@@ -21,6 +21,5 @@ namespace GameOfThrones.Models.DTO
         public List<string> AncestralWeapons { get; set; }
         public List<string> CadetBranches { get; set; }
         public List<string> SwornMembers { get; set; }
-
     }
 }
