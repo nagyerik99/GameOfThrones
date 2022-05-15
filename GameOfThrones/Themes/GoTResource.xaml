@@ -1,0 +1,169 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls" xmlns:x1="using:System">
+
+    <!--Default base colors for future development purposes-->
+    <FontFamily x:Key="GameOfThronesFontFamily">Georgia</FontFamily>
+    
+    <SolidColorBrush x:Key="GameOfThronesBackgroundColor" Color="#D9BB80"/>
+    <SolidColorBrush x:Key="GameOfThronesButtonColor" Color="#86090A"/>
+    <SolidColorBrush x:Key="GameOfThronesForegroundColor" Color="#261E1D"/>
+    <SolidColorBrush x:Key="GemOfThronesLinkColor" Color="#DFDAFF"/>
+    <SolidColorBrush x:Key="ItemSelectedColor" Color="#C79A57"/>
+
+    <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#D9BB80"/>
+    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#86090A"/>
+
+    <!--Overriding some system property for visual clerification  
+    for example, button mouse over on LoadingText, or visual apperance of a disabled button etc.-->
+    <SolidColorBrush x:Key="SystemControlBackgroundBaseLowBrush" Color="#86090A"/>
+    <SolidColorBrush x:Key="SystemControlDisabledBaseMediumLowBrush" Color="#D9BB80"/>
+    <SolidColorBrush x:Key="ListViewItemBackgroundSelected" Color="#C79A57"/>
+    
+
+    <!--NavigationViewItem style-->
+    <Style x:Name="GameOfThronesNavigationViewItemStyle" TargetType="NavigationViewItem">
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontFamily" Value="Georgia"/>
+    </Style>
+    
+    
+    <!--DetailsPanels Grid style-->
+    <Style x:Name="GameOfThronesGrid" TargetType="Grid">
+        <Setter Property="Margin" Value="50,10,20,10" />
+        <Setter Property="Padding" Value="5,0" />
+    </Style>
+
+    <!--WrapPanel style for ListViewTemplate, collections-->
+    <Style x:Name="GameOfThronesWrapPanel" TargetType="controls:WrapPanel">
+        <Setter Property="Orientation" Value="Vertical" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Margin" Value="0,5,0,15" />
+    </Style>
+
+    <!--ButtonStyle for DetailsPanels, like Characters, Books, Allegiances button-->
+    <Style x:Name="GameOfThronesButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="#86090A"/>
+        <Setter Property="Foreground" Value="#D9BB80"/>
+        <Setter Property="FontFamily" Value="Georgia"/>
+        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,10" />
+    </Style>
+    
+    <!--TextBlock style for VisualTemplate of ListViewItems-->
+    <!--LISTVIEW TITLE-->
+    <Style x:Name="GameOfThronesListItemTitleStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#261E1D" />
+        <Setter Property="FontFamily" Value="Georgia"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="Margin" Value="10,10,5,5" />
+    </Style>
+
+    <!--TextBlock style for VisualTemplate of ListViewItems, style following fluent design rules-->
+    <!--LISTVIEW SUBTITLE-->
+    <Style x:Name="GameOfThronesListViewItemSubTitleStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#261E1D" />
+        <Setter Property="FontFamily" Value="Georgia"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="FontStyle" Value="Italic" />
+        <Setter Property="Margin" Value="10,5,5,5" />
+    </Style>
+
+    <!--TextBlock style for VisualTemplate of ListViewItems, style following fluent design rules-->
+    <!--LISTVIEW BODY-->
+    <Style x:Name="GameOfThronesListViewItemBodyStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#261E1D" />
+        <Setter Property="FontFamily" Value="Georgia"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="FontStyle" Value="Italic" />
+        <Setter Property="Margin" Value="10,1,0,0" />
+    </Style>
+
+    <!--Button style for loading more data visual appearance-->
+    <Style x:Name="GameOfThronesLoadMoreButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="#D9BB80"/>
+        <Setter Property="Foreground" Value="#86090A"/>
+        <Setter Property="FontFamily" Value="Georgia"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontStyle" Value="Oblique"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <!--DetailsPanels Title style like book Title, Characters name etc.-->
+    <!--DETAILSPANEL TITLE-->
+    <Style x:Name="GameOfThronesDetailsTitleStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#261E1D" />
+        <Setter Property="FontFamily" Value="Georgia"/>
+        <Setter Property="FontSize" Value="32"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="Margin" Value="-50,5,0,20" />
+    </Style>
+
+    <!--DetailsPanels attributes style-->
+    <!--DETAILSPANEL ATTRIBUTE NAMES-->
+    <Style x:Name="GameOfThronesDetailNameStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#261E1D" />
+        <Setter Property="FontFamily" Value="Georgia"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="FontStyle" Value="Oblique"/>
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="Margin" Value="0,10"/>
+    </Style>
+
+    
+    <!--style for the api data, shown on the detailspanel-->
+    <!--DETAILSPANEL API DATA STYLE-->
+    <Style x:Name="GameOfThronesDetailStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#261E1D" />
+        <Setter Property="FontFamily" Value="Georgia"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="Margin" Value="0,10" />
+    </Style>
+
+
+    <!--style for the data hyperlinks associated with the api data structure-->
+    <!--DETAILSPANEL HYPERLINKS LIKE FATHER,MOTHER,SPOUSE ETC.-->
+    <Style x:Name="GameOfThronesHyperLinkStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#86090A"/>
+        <Setter Property="FontFamily" Value="Georgia"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="Margin" Value="0,6" />
+        <Setter Property="TextDecorations" Value="Underline" />
+    </Style>
+
+    <!--LOADINGVIEW TEXT STYLE-->
+    <Style x:Name="GameOfThronesLoadingText" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#86090A"/>
+        <Setter Property="FontFamily" Value="Georgia"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+
+</ResourceDictionary>

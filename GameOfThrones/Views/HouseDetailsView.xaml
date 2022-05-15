@@ -1,0 +1,152 @@
+﻿<Page
+    x:Class="GameOfThrones.Views.HouseDetailsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GameOfThrones.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:vm="using:GameOfThrones.ViewModels"
+    xmlns:m="using:GameOfThrones.Models"
+    mc:Ignorable="d"
+    Background="{StaticResource GameOfThronesBackgroundColor}"
+    Foreground="{StaticResource GameOfThronesForegroundColor}"
+    FontFamily="{StaticResource GameOfThronesFontFamily}"
+    >
+
+    <Page.DataContext>
+        <vm:HouseDetailsViewModel x:Name="ViewModel"/>
+    </Page.DataContext>
+
+    <Grid>
+        <controls:Loading x:Name="LoadingControl" IsLoading="{Binding IsBusy, Mode=OneWay}" Opacity="0.8">
+            <StackPanel Orientation="Horizontal" Padding="12">
+                <Grid Margin="0,0,8,0">
+                    <ProgressRing IsActive="True" Foreground="{StaticResource GameOfThronesButtonColor}"/>
+                </Grid>
+                <TextBlock Text="Loading..." VerticalAlignment="Center" Style="{StaticResource GameOfThronesLoadingText}"/>
+            </StackPanel>
+        </controls:Loading>
+
+        <Frame x:Name="HouseDetailsFrame" Visibility="{x:Bind ViewModel.ViewLoadingVisibility, Mode=OneWay}">
+            <StackPanel Orientation="Vertical"  Margin="20">
+                <Grid Style="{StaticResource GameOfThronesGrid}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedHouse.Name, Mode=OneWay}" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"
+                               Style="{StaticResource GameOfThronesDetailsTitleStyle}"/>
+
+                    <TextBlock Text="Region:" Grid.Column="0" Grid.Row="1" Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedHouse.Region, Mode=OneWay}" Grid.Column="1" Grid.Row="1" Style="{StaticResource GameOfThronesDetailStyle}"/>
+
+                    <TextBlock Text="Words:" Grid.Column="0" Grid.Row="2" Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedHouse.Words, Mode=OneWay}" Grid.Column="1" Grid.Row="2" Style="{StaticResource GameOfThronesDetailStyle}"/>
+
+                    <TextBlock Text="CoatOfArms:" Grid.Column="0" Grid.Row="3" Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedHouse.CoatOfArms, Mode=OneWay}" Grid.Column="1" Grid.Row="3" Style="{StaticResource GameOfThronesDetailStyle}"/>
+
+                    <TextBlock Text="Titles:" Grid.Column="0" Grid.Row="4" Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedHouse.Titles, Mode=OneWay}" Grid.Column="1" Grid.Row="4" Style="{StaticResource GameOfThronesDetailStyle}"/>
+
+                    <TextBlock Text="Seats:" Grid.Column="0" Grid.Row="5" Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedHouse.Seats, Mode=OneWay}" Grid.Column="1" Grid.Row="5" Style="{StaticResource GameOfThronesDetailStyle}"/>
+
+                    <TextBlock Text="Founded:" Grid.Column="0" Grid.Row="6" Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedHouse.Founded, Mode=OneWay}" Grid.Column="1" Grid.Row="6" Style="{StaticResource GameOfThronesDetailStyle}"/>
+
+                    <TextBlock Text="DiedOut:" Grid.Column="0" Grid.Row="7" Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedHouse.DiedOut, Mode=OneWay}" Grid.Column="1" Grid.Row="7" Style="{StaticResource GameOfThronesDetailStyle}"/>
+
+                    <TextBlock Text="Ancestrial Weapons:" Grid.Column="0" Grid.Row="8" Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedHouse.AncestralWeapons, Mode=OneWay}" Grid.Column="1" Grid.Row="8" Style="{StaticResource GameOfThronesDetailStyle}"/>
+
+                    <TextBlock Text="Founder:" Grid.Column="0" Grid.Row="9" Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <HyperlinkButton x:Name="FounderName" Click="FounderName_Click" Grid.Column="1" Grid.Row="9">
+                        <TextBlock Text="{x:Bind ViewModel.SelectedHouse.Founder.Name, Mode=OneWay}" Style="{StaticResource GameOfThronesHyperLinkStyle}"/>
+                    </HyperlinkButton>
+
+                    <TextBlock Text="CurrentLord:" Grid.Column="0" Grid.Row="10" Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <HyperlinkButton x:Name="CurrentLordName" Click="CurrentLordName_Click" Grid.Column="1" Grid.Row="10">
+                        <TextBlock Text="{x:Bind ViewModel.SelectedHouse.CurrentLord.Name, Mode=OneWay}" Style="{StaticResource GameOfThronesHyperLinkStyle}"/>
+                    </HyperlinkButton>
+
+                    <TextBlock Text="Heir:" Grid.Column="0" Grid.Row="11" Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <HyperlinkButton x:Name="HeirName" Click="HeirName_Click" Grid.Column="1" Grid.Row="11">
+                        <TextBlock Text="{x:Bind ViewModel.SelectedHouse.Heir.Name, Mode=OneWay}" Style="{StaticResource GameOfThronesHyperLinkStyle}"/>
+                    </HyperlinkButton>
+
+                    <TextBlock Text="OverLord:" Grid.Column="0" Grid.Row="12" Style="{StaticResource GameOfThronesDetailNameStyle}"/>
+                    <HyperlinkButton x:Name="OverLordName" Click="OverLordName_Click" Grid.Column="1" Grid.Row="12">
+                        <TextBlock Text="{x:Bind ViewModel.SelectedHouse.OverLord.Name, Mode=OneWay}" Style="{StaticResource GameOfThronesHyperLinkStyle}"/>
+                    </HyperlinkButton>
+                </Grid>
+
+                <Button x:Name="CadetListViewButton"
+                        Click="{x:Bind ViewModel.ModifyCadetListView}" Content="Cadet Branches"
+                        Style="{StaticResource GameOfThronesButtonStyle}"
+                        />
+
+                <ListView x:Name="CadetBrancesListView" 
+                          ItemsSource="{x:Bind ViewModel.CadetBranches,Mode=OneWay}"
+                          Visibility="{x:Bind ViewModel.CadetBranchesVisibility, Mode=OneWay}"
+                          IsItemClickEnabled="True"
+                          ItemClick="CadetBrancesListView_ItemClick"
+                          >
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:Name="CadetBranchesListViewTemplate" x:DataType="m:House">
+                            <controls:WrapPanel Style="{StaticResource GameOfThronesWrapPanel}">
+                                <TextBlock Text="{x:Bind Name}" Style="{StaticResource GameOfThronesListItemTitleStyle}"/>
+                                <TextBlock Text="{x:Bind Words}" Style="{StaticResource GameOfThronesListViewItemBodyStyle}"/>
+                            </controls:WrapPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Button x:Name="LoadMoreCadetBranchesButton" Click="LoadMoreCadetBranchesButton_Click" Visibility="{x:Bind ViewModel.LoadMoreCadetBranchesVisibility, Mode=OneWay}"
+                        Content="{x:Bind ViewModel.CadetBranchesLoadMoreText, Mode=OneWay}"
+                        IsEnabled="{x:Bind ViewModel.CadetDataLoaded, Mode=OneWay}"
+                        Style="{StaticResource GameOfThronesLoadMoreButtonStyle}"/>
+                <Button x:Name="SwornMemberListViewButton"
+                        Click="{x:Bind ViewModel.ModifyMembersListView}"
+                        Content="Sworn Members"
+                        Style="{StaticResource GameOfThronesButtonStyle}"
+                        />
+                <ListView x:Name="MembersListView" ItemsSource="{x:Bind ViewModel.SwornMembers,Mode=OneWay}"
+                          Visibility="{x:Bind ViewModel.SwornMembersVisibility, Mode=OneWay}"
+                          IsItemClickEnabled="True"
+                          ItemClick="MembersListView_ItemClick"
+                          >
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:Name="MembersListViewTemplate" x:DataType="m:Character">
+                            <controls:WrapPanel Style="{StaticResource GameOfThronesWrapPanel}">
+                                <TextBlock Text="{x:Bind Name}" Style="{StaticResource GameOfThronesListItemTitleStyle}"/>
+                                <TextBlock Text="{x:Bind Aliases}" Style="{StaticResource GameOfThronesListViewItemBodyStyle}"/>
+                            </controls:WrapPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Button x:Name="LoadMoreMembersButton" Click="LoadMoreMembersButton_Click" Visibility="{x:Bind ViewModel.LoadMoreSwornMembersVisibility, Mode=OneWay}"
+                        Content="{x:Bind ViewModel.MembersLoadMoreText, Mode=OneWay}"
+                        IsEnabled="{x:Bind ViewModel.MembersDataLoaded, Mode=OneWay}"
+                        Style="{StaticResource GameOfThronesLoadMoreButtonStyle}"/>
+            </StackPanel>
+        </Frame>
+    </Grid>
+    
+</Page>
